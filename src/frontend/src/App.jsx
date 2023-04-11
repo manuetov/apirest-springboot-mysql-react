@@ -40,7 +40,7 @@ const Form = () => {
      formData.append('imagen', file);
  
  console.log(file)
-     axios.post('http://localhost:8081/api/post/', {
+     axios.post('http://localhost:8080/api/post/', {
           method: 'POST',
           headers: { "Content-Type": "multipart/form-data" }, data:formData })
        .then(response => {
