@@ -40,12 +40,8 @@ public class PostBlogController {
         return ResponseEntity.ok(postBlogService.getPostBlogById(id));
     }
 
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<PostBlogDTO> savePost(
-                                                 @ModelAttribute PostBlogDTO postBlogDTO) {
+    @PostMapping
+    public ResponseEntity<PostBlogDTO> savePost(@ModelAttribute PostBlogDTO postBlogDTO) {
         System.out.println(postBlogDTO.getImagen());
 
         try {
