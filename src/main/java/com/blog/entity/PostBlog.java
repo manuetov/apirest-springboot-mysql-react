@@ -18,6 +18,7 @@ public class PostBlog {
     private String titulo;
     private String descripcion;
     private String contenido;
+    private String imagen;
 
     /* relación -> una publicación puede tener muchos comentarios */
     /* Cuando se elimine una publicación se eliminarán los comentarios asociados*/
@@ -28,11 +29,20 @@ public class PostBlog {
 
     public PostBlog() {};
 
-    public PostBlog(Long id, String titulo, String descripcion, String contenido) {
+    public PostBlog(Long id, String titulo, String descripcion, String contenido, String imagen) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.contenido = contenido;
+        this.imagen = imagen;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public Long getId() {

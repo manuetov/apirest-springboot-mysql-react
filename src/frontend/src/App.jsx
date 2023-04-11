@@ -5,13 +5,7 @@ const ApiRecipes = () => {
    const [ recipes, setRecipes ] = useState([])
 
    const fetchAllRecipes = () => {
-      axios.get("http://localhost:8080/api/post", {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      
-      }).then(res => {
+      axios.get("http://localhost:8080/api/post").then(res => {
          console.log(res)
          setRecipes(res.data)
       })
@@ -30,16 +24,32 @@ const Form = () => {
  
    const handleSubmit = (e) => {
      e.preventDefault();
-     axios.post("http://localhost:8080/api/post/", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, description, content }),
-    })
-    .then(res => res.json()).then(data => console.log(data))
-    .catch(err => console.error(err))
+
+     const formData = new FormData();
+     formData.append('titulo', title);
+     formData.append('descripcion', description);
+     formData.append('contenido', content);
+     formData.append('file', file);
+ 
+     axios.post('http://localhost:8080/api/post/', formData)
+       .then(response => {
+         console.log(response.data);
+       })
+       .catch(error => {
+         console.error(error);
+       });
    };
+
+  //    axios.post("http://localhost:8080/api/post/", {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ title, description, content }),
+  //   })
+  //   .then(res => res.json()).then(data => console.log(data))
+  //   .catch(err => console.error(err))
+  //  };
 
 
  

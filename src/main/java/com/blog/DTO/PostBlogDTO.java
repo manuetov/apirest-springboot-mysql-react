@@ -18,10 +18,19 @@ public class PostBlogDTO {
     private String descripcion;
     @NotEmpty
     private String contenido;
+    private String imagen;
     // comentarios
     private Set<Comments> comments;
 
     public PostBlogDTO() {
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getImagen(){
+        return this.imagen = imagen;
     }
 
     public Long getId() { return id; }

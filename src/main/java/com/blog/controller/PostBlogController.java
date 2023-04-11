@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -30,7 +32,9 @@ public class PostBlogController {
     }
 
     @PostMapping
-    public ResponseEntity<PostBlogDTO> savePost(@Valid @RequestBody PostBlogDTO postBlogDTO){
+    public ResponseEntity<PostBlogDTO> savePost(@RequestParam("file") MultipartFile file,
+                                                @Valid @RequestBody PostBlogDTO postBlogDTO) {
+        System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>(postBlogService.createPost(postBlogDTO), HttpStatus.CREATED);
     }
 
