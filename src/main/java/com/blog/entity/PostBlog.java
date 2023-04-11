@@ -3,6 +3,8 @@ package com.blog.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,9 +17,15 @@ public class PostBlog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "titulo", nullable = false)
     private String titulo;
+
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
+
+    @Column(name = "contenido", nullable = false)
     private String contenido;
+
     private String imagen;
 
     /* relación -> una publicación puede tener muchos comentarios */
@@ -92,6 +100,8 @@ public class PostBlog {
                 ", titulo='" + titulo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", contenido='" + contenido + '\'' +
+                ", imagen=" + imagen +
+                ", comments=" + comments +
                 '}';
     }
 }

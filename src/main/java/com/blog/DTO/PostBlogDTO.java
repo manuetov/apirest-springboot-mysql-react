@@ -2,8 +2,11 @@ package com.blog.DTO;
 
 import com.blog.entity.Comments;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Set;
 
 public class PostBlogDTO {
@@ -18,22 +21,21 @@ public class PostBlogDTO {
     private String descripcion;
     @NotEmpty
     private String contenido;
-    private String imagen;
-    // comentarios
+    @Lob
+    private MultipartFile imagen;
+
+        // comentarios
     private Set<Comments> comments;
 
-    public PostBlogDTO() {
+    public MultipartFile getImagen() {
+        return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(MultipartFile imagen) {
         this.imagen = imagen;
     }
 
-    public String getImagen(){
-        return this.imagen = imagen;
-    }
-
-    public Long getId() { return id; }
+     public Long getId() { return id; }
 
     public void setId(Long id) {
         this.id = id;

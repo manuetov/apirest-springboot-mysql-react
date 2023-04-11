@@ -14,6 +14,14 @@ const ApiRecipes = () => {
    useEffect(() => {
       fetchAllRecipes()
    }, [])
+
+   return recipes.map((recipe, index) => (
+    <div key={index}>
+      <h1>{recipe.titulo}</h1>
+      <p>{recipe.description}</p>
+      <p>{recipe.contenido}</p>
+    </div>
+   ))
 }
 
 const Form = () => {
@@ -29,9 +37,12 @@ const Form = () => {
      formData.append('titulo', title);
      formData.append('descripcion', description);
      formData.append('contenido', content);
-     formData.append('file', file);
+     formData.append('imagen', file);
  
-     axios.post('http://localhost:8080/api/post/', formData)
+ console.log(file)
+     axios.post('http://localhost:8081/api/post/', {
+          method: 'POST',
+          headers: { "Content-Type": "multipart/form-data" }, data:formData })
        .then(response => {
          console.log(response.data);
        })
@@ -39,19 +50,6 @@ const Form = () => {
          console.error(error);
        });
    };
-
-  //    axios.post("http://localhost:8080/api/post/", {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ title, description, content }),
-  //   })
-  //   .then(res => res.json()).then(data => console.log(data))
-  //   .catch(err => console.error(err))
-  //  };
-
-
  
    return (
      <form onSubmit={handleSubmit}>
@@ -82,7 +80,7 @@ const Form = () => {
 function App() {
    return (
      <div className="App">
-       <h1>hola</h1>
+       <h1>Chicote pega el bote!!</h1>
        <ApiRecipes />
        <Form />
      </div>
@@ -90,3 +88,16 @@ function App() {
  }
  
  export default App;
+
+
+
+   //    axios.post("http://localhost:8080/api/post/", {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ title, description, content }),
+  //   })
+  //   .then(res => res.json()).then(data => console.log(data))
+  //   .catch(err => console.error(err))
+  //  };

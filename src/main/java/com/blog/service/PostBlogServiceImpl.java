@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class PostBlogServiceImpl implements PostBlogService{
 
     /* -------------- CREA UN POST --------------------------------*/
     @Override
-    public PostBlogDTO createPost(PostBlogDTO postBlogDTO) {
+    public PostBlogDTO createPost(@ModelAttribute PostBlogDTO postBlogDTO) {
         PostBlog postBlog = mapDTOtoEntity(postBlogDTO);
 
         // lo guardo en el repositorio ( persistencia en BD)
@@ -83,7 +84,8 @@ public class PostBlogServiceImpl implements PostBlogService{
 /*      PostBlog postblog = new PostBlog();
         postblog.setTitulo(postBlogDTO.getTitulo());
         postblog.setDescripcion(postBlogDTO.getDescripcion());
-        postblog.setContenido(postBlogDTO.getContenido()); */
+        postblog.setContenido(postBlogDTO.getContenido());
+        postblog.setImagen(postBlogDTO.getImagen(); */
 
         return postBlog;
     }
@@ -98,7 +100,8 @@ public class PostBlogServiceImpl implements PostBlogService{
         postBlogDTO.setId(postBlog.getId());
         postBlogDTO.setTitulo(postBlog.getTitulo());
         postBlogDTO.setDescripcion(postBlog.getDescripcion());
-        postBlogDTO.setContenido(postBlog.getContenido()); */
+        postBlogDTO.setContenido(postBlog.getContenido());
+        postblogDTO.setImagen(postBlog.getImagen(); */
 
         return postBlogDTO;
     }
