@@ -8,9 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +25,7 @@ public class PostBlogServiceImpl implements PostBlogService{
 
     /* -------------- CREA UN POST --------------------------------*/
     @Override
-    public PostBlogDTO createPost(@ModelAttribute PostBlogDTO postBlogDTO) {
+    public PostBlogDTO createPostDTO(@ModelAttribute PostBlogDTO postBlogDTO) {
         PostBlog postBlog = mapDTOtoEntity(postBlogDTO);
 
         // lo guardo en el repositorio ( persistencia en BD)
@@ -38,12 +36,22 @@ public class PostBlogServiceImpl implements PostBlogService{
         return postBlogResponseDTO;
     }
 
+    /* -------------- CREA UN POST --------------------------------*/
+    @Override
+    public PostBlog createPost(@ModelAttribute PostBlog postBlog) {
+
+        // lo guardo en el repositorio ( persistencia en BD)
+        PostBlog newPostblog = postBlogRepository.save(postBlog);
+
+        return newPostblog;
+    }
+
     /* ------------------ DEVUELVE LISTADO DE POSTS ---------------*/
     @Override
-    public List<PostBlogDTO> listAllPost() {
+    public List<PostBlog> listAllPost() {
         // obtengo un listado de postBlog de la BBDD
         List<PostBlog> listPostBlog = postBlogRepository.findAll();
-        return listPostBlog.stream().map(p -> mapEntitytoDTO(p)).collect(Collectors.toList());
+        return listPostBlog.stream().collect(Collectors.toList());
     }
 
     /* ----------------- DEVUELE UN POST POR SU ID ----------------*/
@@ -68,6 +76,7 @@ public class PostBlogServiceImpl implements PostBlogService{
 
         return mapEntitytoDTO(updateSinglePostBlog);
     }
+
     /* ---------------- BORRA UN POST POR SU ID ------------------*/
     @Override
     public void deletePostBlogById(long id) {
@@ -76,6 +85,9 @@ public class PostBlogServiceImpl implements PostBlogService{
 
         postBlogRepository.delete(singlePostBlog);
     }
+
+
+    /* -------------- modelMapper DTOs ---------------------*/
 
     // Convierto de DTO a entidad - usando modelMapper
     private PostBlog mapDTOtoEntity(PostBlogDTO postBlogDTO) {
@@ -105,6 +117,5 @@ public class PostBlogServiceImpl implements PostBlogService{
 
         return postBlogDTO;
     }
-
 
 }

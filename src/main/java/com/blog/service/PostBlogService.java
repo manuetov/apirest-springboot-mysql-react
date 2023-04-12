@@ -1,14 +1,18 @@
 package com.blog.service;
 
 import com.blog.DTO.PostBlogDTO;
+import com.blog.entity.PostBlog;
 
 import java.util.List;
 
 public interface PostBlogService {
 
-    PostBlogDTO createPost(PostBlogDTO postBlogDTO);
 
-    List<PostBlogDTO> listAllPost();
+    PostBlogDTO createPostDTO(PostBlogDTO postBlogDTO);
+
+    PostBlog createPost(PostBlog postBlog);
+
+    List<PostBlog> listAllPost();
 
     PostBlogDTO getPostBlogById(long id);
 

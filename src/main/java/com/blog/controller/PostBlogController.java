@@ -2,25 +2,19 @@ package com.blog.controller;
 
 
 import com.blog.DTO.PostBlogDTO;
+import com.blog.entity.PostBlog;
 import com.blog.service.PostBlogService;
+import com.blog.utils.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/api/post")
@@ -29,8 +23,11 @@ public class PostBlogController {
     @Autowired
     public PostBlogService postBlogService;
 
+    @Autowired
+    public StorageService storageService;
+
     @GetMapping
-    public ResponseEntity<List<PostBlogDTO>> listPost() {
+    public ResponseEntity<List<PostBlog>> listPost() {
 
         return new ResponseEntity<>(postBlogService.listAllPost(), HttpStatus.OK);
     }
@@ -41,25 +38,15 @@ public class PostBlogController {
     }
 
     @PostMapping
-    public ResponseEntity<PostBlogDTO> savePost(@ModelAttribute PostBlogDTO postBlogDTO) {
-        System.out.println(postBlogDTO.getImagen());
+    public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO) {
 
-        try {
-            MultipartFile fileName = postBlogDTO.getImagen();
-            byte[] bytes = postBlogDTO.getImagen().getBytes();
-            Path path = Paths.get("src/main/resources/uploadImages/" + fileName);
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        PostBlog postBlog = PostBlogDTO.toEntity(postBlogDTO);
 
-        /*        if(postBlogDTO.getImagen().isEmpty()) {
-            throw new IllegalStateException("imagen esta vacia");
-        }
-        if(!Arrays.asList(IMAGE_JPEG.getType(), IMAGE_PNG.getType(), IMAGE_GIF.getType()).contains(postBlogDTO.getImagen().getContentType())) {
-            throw new IllegalStateException("formato imagen no permitido");
-        }*/
-        return new ResponseEntity<>(postBlogService.createPost(postBlogDTO), HttpStatus.CREATED);
+        String image = storageService.store(postBlogDTO.getImagen());
+
+        postBlog.setImagen(image);
+
+        return new ResponseEntity<>(postBlogService.createPost(postBlog), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -75,3 +62,29 @@ public class PostBlogController {
     }
 
 }
+
+        /*        if(postBlogDTO.getImagen().isEmpty()) {
+            throw new IllegalStateException("imagen esta vacia");
+        }
+        if(!Arrays.asList(IMAGE_JPEG.getType(), IMAGE_PNG.getType(), IMAGE_GIF.getType()).contains(postBlogDTO.getImagen().getContentType())) {
+            throw new IllegalStateException("formato imagen no permitido");
+        }*/
+
+/*System.out.println(postBlogDTO.getImagen());
+
+        try {
+
+                byte[] bytes = postBlogDTO.getImagen().getBytes();
+
+                MultipartFile image = postBlogDTO.getImagen();
+                String fileName = UUID.randomUUID().toString();
+
+                String fileOriginalName = image.getOriginalFilename();
+
+
+                Path path = Paths.get("src/main/resources/uploadImages/" + fileName);
+                Files.write(path, bytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/

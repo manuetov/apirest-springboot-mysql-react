@@ -2,10 +2,13 @@ package com.blog.DTO;
 
 import com.blog.entity.Comments;
 
+import com.blog.entity.PostBlog;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.Set;
 
@@ -69,5 +72,11 @@ public class PostBlogDTO {
 
     public void setComments(Set<Comments> comments) {
         this.comments = comments;
+    }
+
+    public static PostBlog toEntity(PostBlogDTO postBlogDTO){
+        PostBlog postBlog = new PostBlog();
+        BeanUtils.copyProperties(postBlogDTO, postBlog, "imagen");
+        return postBlog;
     }
 }

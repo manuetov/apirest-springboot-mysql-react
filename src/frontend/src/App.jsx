@@ -4,11 +4,12 @@ import axios from 'axios';
 const ApiRecipes = () => {
    const [ recipes, setRecipes ] = useState([])
 
-   const fetchAllRecipes = () => {
-      axios.get("http://localhost:8080/api/post").then(res => {
+  //  const [file, setFile] = useState(null);
+
+   const fetchAllRecipes = async () => {
+      const res = await axios.get("http://localhost:8080/api/post")
          console.log(res)
-         setRecipes(res.data)
-      })
+         setRecipes(res.data)  
    }
 
    useEffect(() => {
@@ -18,8 +19,9 @@ const ApiRecipes = () => {
    return recipes.map((recipe, index) => (
     <div key={index}>
       <h1>{recipe.titulo}</h1>
-      <p>{recipe.description}</p>
+      <p>{recipe.descripcion}</p>
       <p>{recipe.contenido}</p>
+      <img src={recipe.imagen}/>
     </div>
    ))
 }
@@ -40,9 +42,7 @@ const Form = () => {
      formData.append('imagen', file);
  
  console.log(file)
-     axios.post('http://localhost:8081/api/post/', {
-          method: 'POST',
-          headers: { "Content-Type": "multipart/form-data" }, data:formData })
+     axios.post('http://localhost:8080/api/post', formData )
        .then(response => {
          console.log(response.data);
        })
