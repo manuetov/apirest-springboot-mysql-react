@@ -4,6 +4,7 @@ import com.blog.entity.PostBlog;
 import com.blog.DTO.PostBlogDTO;
 import com.blog.exception.ResourceNotFoundException;
 import com.blog.repository.PostBlogRepository;
+import com.blog.utils.StorageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +24,10 @@ public class PostBlogServiceImpl implements PostBlogService{
     @Autowired
     private PostBlogRepository postBlogRepository;
 
-    /* -------------- CREA UN POST --------------------------------*/
+    @Autowired
+    private StorageService storageService;
+
+/*    *//* -------------- CREA UN POST --------------------------------*//*
     @Override
     public PostBlogDTO createPostDTO(@ModelAttribute PostBlogDTO postBlogDTO) {
         PostBlog postBlog = mapDTOtoEntity(postBlogDTO);
@@ -34,7 +38,7 @@ public class PostBlogServiceImpl implements PostBlogService{
         PostBlogDTO postBlogResponseDTO = mapEntitytoDTO(newPostblog);
 
         return postBlogResponseDTO;
-    }
+    }*/
 
     /* -------------- CREA UN POST --------------------------------*/
     @Override
@@ -71,6 +75,7 @@ public class PostBlogServiceImpl implements PostBlogService{
         singlePostBlog.setTitulo(postBlogDTO.getTitulo());
         singlePostBlog.setDescripcion(postBlogDTO.getDescripcion());
         singlePostBlog.setContenido(postBlogDTO.getContenido());
+        singlePostBlog.setImagen(storageService.store(postBlogDTO.getImagen()));
 
         PostBlog updateSinglePostBlog = postBlogRepository.save(singlePostBlog);
 

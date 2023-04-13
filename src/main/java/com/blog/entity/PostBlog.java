@@ -3,7 +3,6 @@ package com.blog.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +57,7 @@ public class PostBlog {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id = this.id;
     }
 
     public String getTitulo() {

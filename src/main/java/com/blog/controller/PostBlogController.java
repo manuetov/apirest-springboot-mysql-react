@@ -8,12 +8,16 @@ import com.blog.utils.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -27,7 +31,7 @@ public class PostBlogController {
     public StorageService storageService;
 
     @GetMapping
-    public ResponseEntity<List<PostBlog>> listPost() {
+    public ResponseEntity<?> listPost() {
 
         return new ResponseEntity<>(postBlogService.listAllPost(), HttpStatus.OK);
     }
@@ -37,8 +41,12 @@ public class PostBlogController {
         return ResponseEntity.ok(postBlogService.getPostBlogById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO) {
+    @PostMapping (consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+                    produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO
+
+    ) {
 
         PostBlog postBlog = PostBlogDTO.toEntity(postBlogDTO);
 
@@ -49,7 +57,9 @@ public class PostBlogController {
         return new ResponseEntity<>(postBlogService.createPost(postBlog), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+
+    @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostBlogDTO> updateSinglePost(@Valid @RequestBody PostBlogDTO postBlogDTO,
                                                         @PathVariable(name = "id") long id) {
         return new ResponseEntity<>(postBlogService.updatePostBlogById(postBlogDTO, id), HttpStatus.CREATED);

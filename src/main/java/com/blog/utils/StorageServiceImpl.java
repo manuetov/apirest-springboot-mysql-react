@@ -20,6 +20,12 @@ public class StorageServiceImpl implements StorageService{
     private String BASEPATH;
 
     @Override
+    public List<String> loadAll() {
+        File dirPath = new File(BASEPATH);
+        return Arrays.asList(dirPath.list());
+    }
+
+    @Override
     public String store(MultipartFile file) {
         System.out.println(file.getOriginalFilename());
         String ext=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));

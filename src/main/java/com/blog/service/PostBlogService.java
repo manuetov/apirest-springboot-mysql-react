@@ -8,7 +8,7 @@ import java.util.List;
 public interface PostBlogService {
 
 
-    PostBlogDTO createPostDTO(PostBlogDTO postBlogDTO);
+    // PostBlogDTO createPostDTO(PostBlogDTO postBlogDTO);
 
     PostBlog createPost(PostBlog postBlog);
 

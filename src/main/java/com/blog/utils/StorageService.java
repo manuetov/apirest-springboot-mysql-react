@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 public interface StorageService {
 
+    List<String> loadAll();
 
     String store(MultipartFile file);
 
