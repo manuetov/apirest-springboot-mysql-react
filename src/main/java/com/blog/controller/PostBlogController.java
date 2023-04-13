@@ -5,7 +5,13 @@ import com.blog.DTO.PostBlogDTO;
 import com.blog.entity.PostBlog;
 import com.blog.service.PostBlogService;
 import com.blog.utils.StorageService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.connector.Response;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.MediaType;
@@ -16,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,22 +42,40 @@ public class PostBlogController {
     public StorageService storageService;
 
     @GetMapping
-    public ResponseEntity<?> listPost() {
+    public ResponseEntity<?> listPost(PostBlogDTO postBlogDTO) {
 
         return new ResponseEntity<>(postBlogService.listAllPost(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/image/get")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> getImageDynamicType(@RequestParam("imagen") String imagen) {
+        try {
+
+            File file = new File("C:/Users/manue/OneDrive/Web-FullStack/Java/theBridge2/apirest-springboot-mysql/src/main/resources/uploadImages/"+imagen);
+            System.out.println(file);
+            return ResponseEntity.ok()
+                    .body(new InputStreamResource(new FileInputStream(file)));
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.ok(null);
+        }
+    }
+
+
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<PostBlogDTO> getSinglePost(@PathVariable(name = "id") long id){
         return ResponseEntity.ok(postBlogService.getPostBlogById(id));
     }
 
+
     @PostMapping (consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
                     produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO
-
-    ) {
+    public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO ) {
 
         PostBlog postBlog = PostBlogDTO.toEntity(postBlogDTO);
 

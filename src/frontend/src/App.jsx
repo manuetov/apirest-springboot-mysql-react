@@ -19,7 +19,7 @@ const ApiRecipes = () => {
       <h1>{recipe.titulo}</h1>
       <p>{recipe.descripcion}</p>
       <p>{recipe.contenido}</p>
-      <img src={recipe.imagen} alt={recipe.titulo} />
+      <img src={"http://localhost:8080/api/post/image/get?imagen="+recipe.imagen} alt={recipe.titulo} />
     </div>
   ));
 };
@@ -90,6 +90,7 @@ function App() {
   return (
     <div className="App">
       <h1>Chicote pega el bote!!</h1>
+      <img src="http://localhost:8080/api/post/image/get?imagen=6d06887a004e4e988dd98a737e3dff98.jpg"/>
       <ApiRecipes />
       <Form />
     </div>
