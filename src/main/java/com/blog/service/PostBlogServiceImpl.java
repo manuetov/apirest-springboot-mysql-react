@@ -75,7 +75,7 @@ public class PostBlogServiceImpl implements PostBlogService{
         singlePostBlog.setTitulo(postBlogDTO.getTitulo());
         singlePostBlog.setDescripcion(postBlogDTO.getDescripcion());
         singlePostBlog.setContenido(postBlogDTO.getContenido());
-        singlePostBlog.setImagen(storageService.store(postBlogDTO.getImagen()));
+/*        singlePostBlog.setImagen(storageService.store(postBlogDTO.getImagen()));*/
 
         PostBlog updateSinglePostBlog = postBlogRepository.save(singlePostBlog);
 

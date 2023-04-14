@@ -1,6 +1,8 @@
 package com.blog.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +19,13 @@ public class StorageServiceImpl implements StorageService{
     @Value("${spring.servlet.multipart.location}")
     private String BASEPATH;
 
+/*
     @Override
     public List<String> loadAll() {
         File dirPath = new File(BASEPATH);
         return Arrays.asList(dirPath.list());
     }
+*/
 
     @Override
     public String store(MultipartFile imagen) {
@@ -42,5 +46,12 @@ public class StorageServiceImpl implements StorageService{
         return null;
     }
 
+    @Override
+    public Resource load(String fileName) {
+        File filePath = new File(BASEPATH, fileName);
+        if(filePath.exists())
+            return new FileSystemResource(filePath);
+        return null;
+    }
 
 }

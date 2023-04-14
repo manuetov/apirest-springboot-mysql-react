@@ -15,7 +15,7 @@ public class Comments {
 
     /* relación -> muchos comentarios pueden haber en una publicación  */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_blog_id", nullable = false)
+    @JoinColumn(name = "post_meme_id", nullable = false)
     private PostBlog postBlog;
 
     /* ----------- CONSTRUCTORES -----------*/
