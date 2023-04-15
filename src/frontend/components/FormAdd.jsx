@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const FormAdd = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
+
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,7 +56,7 @@ const FormAdd = () => {
       <Form.Group className="m-2">
         <Form.Control
           type="text"
-          placeholder="descripción"
+          placeholder="contenido"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />

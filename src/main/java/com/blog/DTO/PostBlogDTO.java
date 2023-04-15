@@ -4,7 +4,7 @@ import com.blog.entity.Comments;
 
 import com.blog.entity.PostBlog;
 import jakarta.persistence.Lob;
-import jakarta.validation.constraints.NotEmpty;
+
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,15 +16,14 @@ public class PostBlogDTO {
 
     private Long id;
 
-    @NotEmpty
     @Size(min = 3, message = "El titulo debe contener más de 3 caracteres")
     private String titulo;
-    @NotEmpty
+
     @Size(min = 3, message = "La descripción debe contener más de 10 caracteres")
     private String descripcion;
-    @NotEmpty
+
     private String contenido;
-    @Lob
+
     private MultipartFile imagen;
 
         // comentarios
@@ -74,9 +73,15 @@ public class PostBlogDTO {
         this.comments = comments;
     }
 
+    /* El método BeanUtils.copyProperties() es un método de utilidad del Framework Spring que
+     copia los valores de las propiedades del objeto fuente(DTO) al objeto destino(entity).
+     El tercer parámetro es una lista de propiedades que se deben ignorar durante el proceso
+     de copia. En este caso, se ignora la propiedad "imagen", lo que sugiere que se maneja de
+     forma separada o no es necesaria en la entidad PostBlog.*/
     public static PostBlog toEntity(PostBlogDTO postBlogDTO){
         PostBlog postBlog = new PostBlog();
         BeanUtils.copyProperties(postBlogDTO, postBlog, "imagen");
         return postBlog;
     }
+
 }

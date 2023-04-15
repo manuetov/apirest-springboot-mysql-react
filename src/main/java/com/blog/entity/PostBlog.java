@@ -36,6 +36,13 @@ public class PostBlog {
 
     public PostBlog() {};
 
+    public PostBlog(Long id, String titulo, String descripcion, String contenido) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.contenido = contenido;
+    }
+
     public PostBlog(Long id, String titulo, String descripcion, String contenido, String imagen) {
         this.id = id;
         this.titulo = titulo;
