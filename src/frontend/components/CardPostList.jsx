@@ -1,7 +1,6 @@
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 import React, { useState, useEffect, Fragment } from "react";
-import styled from 'styled-components'
 
 const CardPostList = () => {
   const [recipes, setRecipes] = useState([]);
@@ -22,7 +21,7 @@ const CardPostList = () => {
 
 
       {recipes.map((recipe, index) => (
-      <Card key={index} className="card bg-dark m-2 mx-auto" style={{ width: "14rem"}}>
+      <Card key={index} className="card m-2 mx-auto" style={{ width: "14rem"}}>
         <Card.Body className="text-center">
           <Card.Title className="fs-4 pb-2 fw-bold text-danger" >
             {recipe.titulo}

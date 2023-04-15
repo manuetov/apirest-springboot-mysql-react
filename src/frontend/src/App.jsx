@@ -1,21 +1,28 @@
-import FormAdd from "../components/FormAdd"
-import NavBar from "../components/NavBar"
-import CardPostList from "../components/CardPostList"
-
+import { NavBar, CardPostList, FormAdd, Sidebar } from "../components";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <Container-fluid>
+    <Router>
+      
       <NavBar />
-      <CardPostList />
-      <FormAdd />
-    </Container-fluid>
+      <Sidebar />
+      
+      <Routes>
+        <Route path='/favourites' element={<CardPostList />} />
+        <Route path='/addmeme' element={<FormAdd />} />
+        {/* <Route path="*" element={<Error />} /> */}  
+      </Routes>
+
+    </Router>
   );
 }
 
 export default App;
 
-{/* <img src="http://localhost:8080/api/post/image/get?imagen=6d06887a004e4e988dd98a737e3dff98.jpg"/> */}
+{
+  /* <img src="http://localhost:8080/api/post/image/get?imagen=6d06887a004e4e988dd98a737e3dff98.jpg"/> */
+}
 
 //    axios.post("http://localhost:8080/api/post/", {
 //     method: 'POST',
