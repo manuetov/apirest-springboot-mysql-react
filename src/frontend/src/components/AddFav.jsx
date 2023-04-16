@@ -1,7 +1,7 @@
 const AddFav = () => {
   return (
     <div>
-      <span className=''>Add to Favourites  </span>
+      <span className=''>Añadir a favoritos  </span>
 			<svg
 				width='1em'
 				height='1em'
