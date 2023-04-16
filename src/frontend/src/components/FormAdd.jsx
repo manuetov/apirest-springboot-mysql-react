@@ -79,25 +79,3 @@ const FormAdd = () => {
 
 export default FormAdd;
 
-{
-  /* <label>
-         Descripcion:
-         <input
-           type="text"
-           value={description}
-           onChange={(e) => setDescription(e.target.value)}
-         />
-       </label>
-       <label>
-         Contentido:
-         <textarea
-           value={content}
-           onChange={(e) => setContent(e.target.value)}
-         />
-       </label>
-       <label>
-         File:
-         <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-       </label>
-       <button type="submit">Submit</button> */
-}

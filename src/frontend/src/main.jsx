@@ -6,7 +6,7 @@ import './main.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-import { SidebarProvider } from '../context/sidebar_context';
+import { SidebarProvider } from './context/sidebar_context';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

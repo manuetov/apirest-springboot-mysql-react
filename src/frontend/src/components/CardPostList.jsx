@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import Button from 'react-bootstrap/Button';
 
 import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 
 const CardPostList = () => {
@@ -39,7 +39,7 @@ const CardPostList = () => {
             </Card.Title>
             <Card.Img
               style={{ height: "12rem" }}
-              src={`${img_URL}` + `${meme.imagen}`}
+              src={`${img_URL}${meme.imagen}`}
               alt={meme.titulo}
               className="mb-2"
             />

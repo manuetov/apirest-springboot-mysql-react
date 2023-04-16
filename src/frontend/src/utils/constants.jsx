@@ -1,9 +1,5 @@
 export const links = [
-   // {
-   //    id: 1,
-   //    text: "buscar memes",
-   //    url:"/"
-   // },
+
    {
       id:1,
       text: "añadir meme",
@@ -13,5 +9,10 @@ export const links = [
       id:2,
       text: "favoritos",
       url:"/favourites"
-   }
+   },
+   {
+      id: 3,
+      text: "buscar memes",
+      url:"/buscar"
+   },
 ]
