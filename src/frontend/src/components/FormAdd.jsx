@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 const FormAdd = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
-
-  const navigate = useNavigate()
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,10 +25,22 @@ const FormAdd = () => {
       })
       .then((res) => {
         console.log(res.data);
+        setTitle("");
+        setDescription("");
+        setContent("");
+        setFile(null);
+        setPreviewImage(null);
       })
       .catch((error) => {
         console.error(error);
       });
+      window.location.reload();
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   return (
@@ -65,9 +75,15 @@ const FormAdd = () => {
       <Form.Group className="m-2">
         <Form.Control
           type="file"
-          // size="lg"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={handleFileInputChange}
         />
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Imagen seleccionada"
+            style={{ maxWidth: "200px", marginTop: "10px" }}
+          />
+        )}
       </Form.Group>
 
       <Button variant="primary" type="submit" className="m-2">
@@ -78,4 +94,5 @@ const FormAdd = () => {
 };
 
 export default FormAdd;
+
 

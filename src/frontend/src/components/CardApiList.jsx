@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from 'styled-components';
+import AddFav from "./AddFav";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -26,13 +27,16 @@ const CardApiList = () => {
    return (
 <div>
       <h1>Trending Gifs</h1>
+      
       <GifCards>
         {gifs.map((gif) => (
           <GifCard key={gif.id}>
             <GifImage src={gif.images.fixed_height.url} alt={gif.title} />
             <GifTitle className="gif-title">{gif.title}</GifTitle>
             <GifActions className="gif-actions">
-              <button onClick={() => handleFavorite(gif)}>Add to Favorites</button>
+              <button onClick={() => handleFavorite(gif)}>
+               <AddFav />
+              </button>
             </GifActions>
           </GifCard>
         ))}
@@ -45,20 +49,14 @@ const GifCards = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-`;
+  `;
 
 const GifCard = styled.div`
   margin: 10px;
+  margin-bottom: 100px;
   width: 200px;
   height: 300px;
   position: relative;
-  cursor: pointer;
-  &:hover .gif-title {
-    transform: translateY(0);
-  }
-  &:hover .gif-actions {
-    transform: translateY(0);
-  }
 `;
 
 const GifImage = styled.img`
@@ -88,25 +86,22 @@ const GifActions = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-  opacity: 0;
-  transform: translateY(-100%);
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   & > * {
-    margin: 10px;
+    margin: 5px;
   }
   & > button {
     border: none;
     background-color: white;
     color: black;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 3px;
+    border-radius: 10px;
     cursor: pointer;
     &:hover {
       background-color: black;
@@ -119,8 +114,5 @@ const GifActions = styled.div`
 export default CardApiList;
 
 
-//const URL = `https://api.giphy.com/v1/gifs/search?api_key=cRtgVU7qbxYGTVEt1pqAfq6kiQh25oOF&q=${category}&limit=${20}`;
-// https://api.giphy.com/v1/gifs/search?api_key=cRtgVU7qbxYGTVEt1pqAfq6kiQh25oOF&q=${perro}&limit=${25}&offset=0&rating=g&lang=en
 
-// https://api.giphy.com/v1/gifs/trending?api_key=cRtgVU7qbxYGTVEt1pqAfq6kiQh25oOF&limit=25&rating=g
-// https://api.giphy.com/v1/stickers/search?api_key=${APIKEY}&q=perro&limit=${25}
+
