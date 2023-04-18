@@ -8,6 +8,11 @@ const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
 const CardApiList = () => {
   const [gifs, setGifs] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
+  const [file, setFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const inputRef = useRef("");
 
   const getGifs = () => {
@@ -42,8 +47,60 @@ const CardApiList = () => {
       .catch((error) => console.error(error));
   };
 
-  const handleFavorite = (gif) => {
-    console.log(gif);
+  // const handleFavorite = (gif) => {
+  //   const { id, title, images } = gif;
+  //   const newFavorite = { id, title, image: images.fixed_height.url };
+  //   setFavorites([...favorites, newFavorite]);
+  //   const formData = new FormData();
+  //   formData.append("titulo", title);
+  //   formData.append("imagen", newFavorite.image);
+  //   axios
+  //     .post("http://localhost:8080/api/post", formData, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     });
+  // };
+
+  const handleFavorite = async (gif) => {
+    // const imageUrl = gif.images.fixed_height.url;
+    // const title = gif.title;
+    
+    // Obtener la imagen y crear un objeto File
+    // fetch(imageUrl)
+    //   .then(response => response.blob())
+    //   .then(blob => {
+    //     const file = new File([blob], "filename.jpg", { type: "image/jpeg" });
+        
+    //     // Creao formData con el objeto File y los otros datos
+    //     const formData = new FormData();
+    //     formData.append("title", title);
+    //     formData.append("imagen", file);
+    const { data } = await axios.get(gif.images.fixed_height.url, {
+      responseType: 'blob',
+    });
+  
+    const formData = new FormData();
+    formData.append('titulo', gif.title);
+    formData.append("descripcion", "");
+    formData.append("contenido", "");
+    formData.append('imagen', data, 'image.gif');
+  
+  
+        // Enviar formData al servidor
+        axios.post("http://localhost:8080/api/post", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setTitle("");
+          setDescription("");
+          setContent("");
+          setFile(null);
+          setPreviewImage(null);
+        })
+        .catch((error) => console.error(error));
   };
 
   return (
@@ -52,12 +109,12 @@ const CardApiList = () => {
         <Form.Group className="m-2">
           <Form.Control
             type="text"
-            placeholder="buscar"
+            placeholder="Introduce un texto "
             ref={inputRef}
           />
         </Form.Group>
         <Button variant="primary" type="submit" className="m-2">
-          enviar
+          buscar
         </Button>
       </Form>
 
