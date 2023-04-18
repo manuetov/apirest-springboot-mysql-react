@@ -1,4 +1,4 @@
-import { NavBar, CardPostList, FormAdd, Sidebar, CardApiList } from "./components";
+import { NavBar, CardFavList, FormAdd, Sidebar, CardApiList } from "./components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       
       <Routes>
         <Route path='/buscar' element={<CardApiList />} /> 
-        <Route path='/favourites' element={<CardPostList />} />
+        <Route path='/favorites' element={<CardFavList />} />
         <Route path='/addmeme' element={<FormAdd />} />
         {/* <Route path="*" element={<Error />} /> */}  
       </Routes>

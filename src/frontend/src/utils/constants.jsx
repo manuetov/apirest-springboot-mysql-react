@@ -8,7 +8,7 @@ export const links = [
    {
       id:2,
       text: "favoritos",
-      url:"/favourites"
+      url:"/favorites"
    },
    {
       id: 3,

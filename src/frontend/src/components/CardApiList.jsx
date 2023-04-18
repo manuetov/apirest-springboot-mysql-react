@@ -47,36 +47,8 @@ const CardApiList = () => {
       .catch((error) => console.error(error));
   };
 
-  // const handleFavorite = (gif) => {
-  //   const { id, title, images } = gif;
-  //   const newFavorite = { id, title, image: images.fixed_height.url };
-  //   setFavorites([...favorites, newFavorite]);
-  //   const formData = new FormData();
-  //   formData.append("titulo", title);
-  //   formData.append("imagen", newFavorite.image);
-  //   axios
-  //     .post("http://localhost:8080/api/post", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
 
   const handleFavorite = async (gif) => {
-    // const imageUrl = gif.images.fixed_height.url;
-    // const title = gif.title;
-    
-    // Obtener la imagen y crear un objeto File
-    // fetch(imageUrl)
-    //   .then(response => response.blob())
-    //   .then(blob => {
-    //     const file = new File([blob], "filename.jpg", { type: "image/jpeg" });
-        
-    //     // Creao formData con el objeto File y los otros datos
-    //     const formData = new FormData();
-    //     formData.append("title", title);
-    //     formData.append("imagen", file);
     const { data } = await axios.get(gif.images.fixed_height.url, {
       responseType: 'blob',
     });
@@ -88,7 +60,7 @@ const CardApiList = () => {
     formData.append('imagen', data, 'image.gif');
   
   
-        // Enviar formData al servidor
+        // Envio formData al servidor
         axios.post("http://localhost:8080/api/post", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })

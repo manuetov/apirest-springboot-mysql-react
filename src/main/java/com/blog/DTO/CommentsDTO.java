@@ -7,14 +7,14 @@ import jakarta.validation.constraints.Size;
 public class CommentsDTO {
 
     private Long id;
-    @NotEmpty(message = "El nombre no puede estar vacío o nulo")
+
     @Size(min = 3, message = "El titulo debe contener más de 3 caracteres")
     private String nombre;
-    @NotEmpty(message = "El nombre no puede estar vacío o nulo")
+/*    @NotEmpty(message = "El nombre no puede estar vacío o nulo")*/
     @Email
     private String email;
-    @NotEmpty
-    @Size(min = 10, message = "El comentario debe tener al menos 10 caracteres")
+
+    @Size(min = 3, message = "El comentario debe tener al menos 10 caracteres")
     private String comentario;
 
     public Long getId() { return id; }
