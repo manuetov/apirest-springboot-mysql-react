@@ -1,9 +1,9 @@
 export const links = [
 
    {
-      id:1,
-      text: "añadir meme",
-      url:"/addMeme"
+      id: 1,
+      text: "home",
+      url:"/"
    },
    {
       id:2,
@@ -14,5 +14,10 @@ export const links = [
       id: 3,
       text: "buscar memes",
       url:"/buscar"
+   },
+   {
+      id:4,
+      text: "añadir meme",
+      url:"/addMeme"
    },
 ]

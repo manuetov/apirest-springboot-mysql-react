@@ -2,18 +2,21 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AddFav from "./AddFav";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Toast } from "react-bootstrap";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
 const CardApiList = () => {
   const [gifs, setGifs] = useState([]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
   const inputRef = useRef("");
+
+  const [showToast, setShowToast] = useState(true);
+  const [toastMessage, setToastMessage] = useState("");
 
   const getGifs = () => {
     axios
@@ -32,6 +35,7 @@ const CardApiList = () => {
     getGifs();
   }, []);
 
+  // buscar en la api
   const handleSubmit = (e) => {
     e.preventDefault();
     const inputValue = inputRef.current.value;
@@ -47,36 +51,47 @@ const CardApiList = () => {
       .catch((error) => console.error(error));
   };
 
-
+  // añadir a favoritos
   const handleFavorite = async (gif) => {
     const { data } = await axios.get(gif.images.fixed_height.url, {
-      responseType: 'blob',
+      responseType: "blob",
     });
-  
+
     const formData = new FormData();
-    formData.append('titulo', gif.title);
+    formData.append("titulo", gif.title);
     formData.append("descripcion", "");
     formData.append("contenido", "");
-    formData.append('imagen', data, 'image.gif');
-  
-  
-        // Envio formData al servidor
-        axios.post("http://localhost:8080/api/post", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((res) => {
-          console.log(res.data);
-          setTitle("");
-          setDescription("");
-          setContent("");
-          setFile(null);
-          setPreviewImage(null);
-        })
-        .catch((error) => console.error(error));
+    formData.append("imagen", data, "image.gif");
+
+    // Envio formData al servidor
+    axios
+      .post("http://localhost:8080/api/post", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setTitle("");
+        setDescription("");
+        setContent("");
+        setFile(null);
+      })
+      .catch((error) => console.error(error));
+
+    setShowToast(true);
+    setToastMessage("Gif añadido a fovoritos!!!");
   };
 
   return (
     <div>
+      {/* toast */}
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={3000}
+        autohide
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
       <Form onSubmit={handleSubmit} className="m-2">
         <Form.Group className="m-2">
           <Form.Control
@@ -85,7 +100,7 @@ const CardApiList = () => {
             ref={inputRef}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" className="m-2">
+        <Button variant="primary" type="submit" size="sm" className="m-2">
           buscar
         </Button>
       </Form>

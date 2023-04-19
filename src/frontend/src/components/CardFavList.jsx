@@ -13,6 +13,8 @@ const CardFavList = () => {
   const [updatedDescription, setUpdatedDescription] = useState("");
   const [updatedContent, setUpdatedContent] = useState("");
 
+  const [formVisible, setFormVisible] = useState(false);
+
   const fetchAllMemes = async () => {
     const res = await axios.get("http://localhost:8080/api/post");
     console.log(res.data);
@@ -23,12 +25,14 @@ const CardFavList = () => {
     fetchAllMemes();
   }, []);
 
+  // borrar 
   const deleteMeme = async (id) => {
     await axios.delete(`http://localhost:8080/api/post/${id}`);
     window.location.reload();
   };
 
-  const handleUpdateMeme = async (e, id) => {
+  // actualizar
+  const handleUpdateMeme = async (e, id, setFormVisible) => {
     e.preventDefault();
     await axios.put(`http://localhost:8080/api/post/${id}`, {
       titulo: updatedTitle,
@@ -40,12 +44,14 @@ const CardFavList = () => {
       prevMemes.map((meme) => 
         meme.id == id ? {
           ...meme,
-          titulo: updatedTitle,
-          descripcion: updatedDescription,
-          contenido: updatedContent
+          titulo: updatedTitle || null,
+          descripcion: updatedDescription || null,
+          contenido: updatedContent || null
         } : meme
       )
     )
+    setEditingMeme(null)
+    setFormVisible(false)
   };
 
   return (
@@ -72,6 +78,7 @@ const CardFavList = () => {
             <Card.Text className="mb-5">{meme.contenido}</Card.Text>
 
             <Button
+            size="sm"
               variant="danger"
               className="m-1"
               onClick={() => deleteMeme(meme.id)}
@@ -80,6 +87,7 @@ const CardFavList = () => {
             </Button>
 
             <Button
+              size="sm"
               variant="success"
               className="m-1"
               onClick={() => setEditingMeme(meme)}
@@ -89,7 +97,7 @@ const CardFavList = () => {
           {/* {console.log(meme,editingMeme,editingMeme && editingMeme.Id === meme.id )} */}
           {editingMeme && editingMeme.id === meme.id && (
           
-          <Form onSubmit={(e) => handleUpdateMeme(e, meme.id)}>
+          <Form onSubmit={(e) => handleUpdateMeme(e, meme.id, setFormVisible)}>
             <Form.Group className="m-2">
               <Form.Control
                 type="text"
@@ -117,7 +125,7 @@ const CardFavList = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="m-2">
+            <Button variant="primary" type="submit" size="sm" className="m-2">
               guardar
             </Button>
           </Form>

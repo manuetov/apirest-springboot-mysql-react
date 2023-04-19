@@ -7,6 +7,7 @@ import jakarta.persistence.Lob;
 
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -15,15 +16,16 @@ import java.util.Set;
 public class PostBlogDTO {
 
     private Long id;
-
-    @Size(min = 3, message = "El titulo debe contener más de 3 caracteres")
+    @Nullable
+    //@Size(min = 3, message = "El titulo debe contener más de 3 caracteres")
     private String titulo;
-
-    @Size(min = 3, message = "La descripción debe contener más de 10 caracteres")
+    @Nullable
+    //@Size(min = 3, message = "La descripción debe contener más de 3 caracteres")
     private String descripcion;
-
+    @Nullable
+    //@Size(min = 3, message = "La descripción debe contener más de 10 caracteres")
     private String contenido;
-
+    @Nullable
     private MultipartFile imagen;
 
         // comentarios
