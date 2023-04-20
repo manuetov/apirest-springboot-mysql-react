@@ -17,6 +17,8 @@ const CardApiList = () => {
 
   const [showToast, setShowToast] = useState(true);
   const [toastMessage, setToastMessage] = useState("");
+  // guarda la posición del toast en la pantalla
+  const [toastPosition, setToastPosition] = useState({ top: undefined, left: 0 });
 
   const getGifs = () => {
     axios
@@ -33,7 +35,18 @@ const CardApiList = () => {
 
   useEffect(() => {
     getGifs();
-  }, []);
+
+    // actualiza toastPosition cada vez que el usuario desplaza la página.
+    const handleScroll = () => {
+      const position = window.pageYOffset
+      setToastPosition({top: position, left: toastPosition.left})
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [toastPosition.left]);
 
   // buscar en la api
   const handleSubmit = (e) => {
@@ -83,15 +96,6 @@ const CardApiList = () => {
 
   return (
     <div>
-      {/* toast */}
-      <Toast
-        show={showToast}
-        onClose={() => setShowToast(false)}
-        delay={3000}
-        autohide
-      >
-        <Toast.Body>{toastMessage}</Toast.Body>
-      </Toast>
       <Form onSubmit={handleSubmit} className="m-2">
         <Form.Group className="m-2">
           <Form.Control
@@ -104,6 +108,17 @@ const CardApiList = () => {
           buscar
         </Button>
       </Form>
+
+      {/* toast */}
+      <Toast
+        style={{ top: toastPosition.top, left: toastPosition.left }}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={3000}
+        autohide
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
 
       <h1>Trending Gifs</h1>
       <GifCards>
@@ -122,7 +137,6 @@ const CardApiList = () => {
     </div>
   );
 };
-
 
 const GifCards = styled.div`
   display: flex;
@@ -191,12 +205,11 @@ const GifActions = styled.div`
 
 export default CardApiList;
 
+// const formData = new FormData()
+// formData.append("titulo", gif.title)
+// // formData.append("imagen", gif.images.fixed_height.url)
+// console.log(formData)
 
-    // const formData = new FormData()
-    // formData.append("titulo", gif.title)
-    // // formData.append("imagen", gif.images.fixed_height.url)
-    // console.log(formData)
-
-    // axios.post("http://localhost:8080/api/post", formData, {
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // })
+// axios.post("http://localhost:8080/api/post", formData, {
+//   headers: { "Content-Type": "multipart/form-data" },
+// })
