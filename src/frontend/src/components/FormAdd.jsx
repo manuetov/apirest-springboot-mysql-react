@@ -1,6 +1,49 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Form, Button } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
+import styled from "styled-components";
+import filaGifs from '../assets/fila-gifs.gif'
+
+const FormContainer = styled(Container)`
+  background-color: #f8f9fa;
+  padding: 50px;
+  border-radius: 5px;
+`;
+
+const Wrapper = styled.section`
+
+  min-height: 60vh;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 4rem;
+  display: grid;
+  background: var(--clr-grey-10);
+  img{
+    width: 210%;
+  }
+
+  @media screen and (max-width: 799px) {
+    h2 {
+      font-size: 2.2rem;
+    }
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    img{
+      width: 100%;
+      height: 120%;
+    }
+  }
+  @media (min-width: 800px) {
+    height: calc(100vh - 5rem);
+    h2 {
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 0 1;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+  }
+`;
 
 const FormAdd = () => {
   const [title, setTitle] = useState("");
@@ -34,7 +77,7 @@ const FormAdd = () => {
       .catch((error) => {
         console.error(error);
       });
-      window.location.reload();
+    window.location.reload();
   };
 
   const handleFileInputChange = (e) => {
@@ -44,55 +87,69 @@ const FormAdd = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="m-2">
-      <Form.Group className="m-2">
-        <Form.Control
-          type="text"
-          placeholder="titulo"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </Form.Group>
+    <Wrapper className="section">
+      <article className="content">
+        <h2>quieres guardar tus propios gifs? súbelos!!</h2>
+        <p>
+          Los GIFs son una secuencia de imágenes animadas que se repiten en
+          bucle. Además, los GIFs se pueden crear a partir de clips de video, lo
+          que significa que pueden utilizarse para resaltar momentos destacados
+          o para hacer referencia a escenas famosas de películas o programas de
+          televisión.
+        </p>
+      </article>
+      <article className="form-container">
+        <FormContainer>
+          <Form onSubmit={handleSubmit} className="m-2">
+            <Form.Group className="m-2">
+              <Form.Control
+                type="text"
+                placeholder="titulo"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
 
-      <Form.Group className="m-2">
-        <Form.Control 
-          type="text"
-          placeholder="descripción"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </Form.Group>
+            <Form.Group className="m-2">
+              <Form.Control type="file" onChange={handleFileInputChange} />
+              {previewImage && (
+                <img
+                  src={previewImage}
+                  alt="Imagen seleccionada"
+                  style={{ maxWidth: "200px", marginTop: "10px" }}
+                />
+              )}
+            </Form.Group>
 
-      <Form.Group className="m-2">
-        <Form.Control
-          type="text"
-          placeholder="contenido"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group className="m-2">
-        <Form.Control
-          type="file"
-          onChange={handleFileInputChange}
-        />
-        {previewImage && (
-          <img
-            src={previewImage}
-            alt="Imagen seleccionada"
-            style={{ maxWidth: "200px", marginTop: "10px" }}
-          />
-        )}
-      </Form.Group>
-
-      <Button variant="primary" type="submit" className="m-2">
-        enviar
-      </Button>
-    </Form>
+            <Button variant="primary" type="submit" className="m-2">
+              añadir a favoritos
+            </Button>
+          </Form>
+        </FormContainer>
+      </article>
+      <img src={filaGifs} alt="gifs"/>
+    </Wrapper>
   );
 };
 
 export default FormAdd;
 
+{
+  /* <Form.Group className="m-2">
+            <Form.Control
+              type="text"
+              placeholder="descripción"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Form.Group>
 
+          <Form.Group className="m-2">
+            <Form.Control
+              type="text"
+              placeholder="contenido"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </Form.Group> */
+}

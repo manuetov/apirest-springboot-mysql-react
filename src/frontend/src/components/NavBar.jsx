@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { links } from "../utils/constants";
 import { FaBars } from "react-icons/fa";
+import Logo from './logo'
 
 import { useSidebarContext } from "../context/sidebar_context";
 
@@ -12,8 +13,10 @@ const NavBar = () => {
   return (
     <NavContainer>
       <div className="nav-center">
-
         <div className="nav-header">
+      <Link to='/'>
+            <Logo/> 
+          </Link>
           <button type="button" className="nav-toggle" onClick={openSidebar}>
             <FaBars />
           </button>

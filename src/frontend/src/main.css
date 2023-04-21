@@ -148,7 +148,7 @@ button {
 
 /* section */
 .section {
-  padding: 5rem 0;
+  padding: 5rem 3rem;
 }
 .section-center {
   width: 90vw;
@@ -156,7 +156,7 @@ button {
   max-width: var(--max-width);
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 800px) {
   .section-center {
     width: 95vw;
   }
