@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AddFav from "./AddFav";
-import { Form, Button, Toast } from "react-bootstrap";
+import { Form, Button, Toast, Alert } from "react-bootstrap";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -18,7 +18,11 @@ const CardApiList = () => {
   const [showToast, setShowToast] = useState(true);
   const [toastMessage, setToastMessage] = useState("");
   // guarda la posición del toast en la pantalla
-  const [toastPosition, setToastPosition] = useState({ top: undefined, left: 0 });
+  const [toastPosition, setToastPosition] = useState({
+    top: undefined,
+    left: "40%",
+    transform: "translate(-50%, -50%",
+  });
 
   const getGifs = () => {
     axios
@@ -38,15 +42,24 @@ const CardApiList = () => {
 
     // actualiza toastPosition cada vez que el usuario desplaza la página.
     const handleScroll = () => {
-      const position = window.pageYOffset
-      setToastPosition({top: position, left: toastPosition.left})
-    }
+      const position = window.pageYOffset + window.innerHeight /2;
+      setToastPosition({ top: position, left: toastPosition.left });
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [toastPosition.left]);
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   // buscar en la api
   const handleSubmit = (e) => {
@@ -109,34 +122,42 @@ const CardApiList = () => {
         </Button>
       </Form>
 
-      {/* toast */}
-      <Toast
-        style={{ top: toastPosition.top, left: toastPosition.left }}
-        show={showToast}
-        onClose={() => setShowToast(false)}
-        delay={3000}
-        autohide
-      >
-        <Toast.Body>{toastMessage}</Toast.Body>
-      </Toast>
+      {/* alert*/}
+      <div className="container-fluid mt-3">
 
-      <h1>Trending Gifs</h1>
-      <GifCards>
-        {gifs.map((gif) => (
-          <GifCard key={gif.id}>
-            <GifImage src={gif.images.fixed_height.url} alt={gif.title} />
-            <GifTitle className="gif-title">{gif.title}</GifTitle>
-            <GifActions className="gif-actions">
-              <button onClick={() => handleFavorite(gif)}>
-                <AddFav />
-              </button>
-            </GifActions>
-          </GifCard>
-        ))}
-      </GifCards>
+          <ToastAlert
+            style={{ top: 0, position:"fixed", left: toastPosition.left }}
+            show={showToast}
+            variant="success"
+            onClose={() => setShowToast(false)}
+            dismissible
+          >
+            <Alert.Heading>{toastMessage}</Alert.Heading>
+          </ToastAlert>
+
+          <h1>Trending Gifs</h1>
+          <GifCards>
+            {gifs.map((gif) => (
+              <GifCard key={gif.id}>
+                <GifImage src={gif.images.fixed_height.url} alt={gif.title} />
+                <GifTitle className="gif-title">{gif.title}</GifTitle>
+                <GifActions className="gif-actions">
+                  <button onClick={() => handleFavorite(gif)}>
+                    <AddFav />
+                  </button>
+                </GifActions>
+              </GifCard>
+            ))}
+          </GifCards>
+        </div>
+     
     </div>
   );
 };
+
+const ToastAlert = styled(Alert)`
+  z-index: 1;
+`;
 
 const GifCards = styled.div`
   display: flex;
@@ -213,3 +234,16 @@ export default CardApiList;
 // axios.post("http://localhost:8080/api/post", formData, {
 //   headers: { "Content-Type": "multipart/form-data" },
 // })
+
+{
+  /* toast
+      <Toast
+        style={{ top: toastPosition.top, left: toastPosition.left }}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={3000}
+        autohide
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast> */
+}
