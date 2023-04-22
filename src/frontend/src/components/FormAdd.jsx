@@ -1,49 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import styled from "styled-components";
-import filaGifs from '../assets/fila-gifs.gif'
-
-const FormContainer = styled(Container)`
-  background-color: #f8f9fa;
-  padding: 50px;
-  border-radius: 5px;
-`;
-
-const Wrapper = styled.section`
-
-  min-height: 60vh;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 4rem;
-  display: grid;
-  background: var(--clr-grey-10);
-  img{
-    width: 210%;
-  }
-
-  @media screen and (max-width: 799px) {
-    h2 {
-      font-size: 2.2rem;
-    }
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    img{
-      width: 100%;
-      height: 120%;
-    }
-  }
-  @media (min-width: 800px) {
-    height: calc(100vh - 5rem);
-    h2 {
-      margin-bottom: 2rem;
-      text-align: center;
-      text-shadow: 0 1;
-    }
-    p {
-      font-size: 1.25rem;
-    }
-  }
-`;
+import filaGifs from "../assets/fila-gifs.gif";
 
 const FormAdd = () => {
   const [title, setTitle] = useState("");
@@ -51,6 +10,41 @@ const FormAdd = () => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // alerts toast states
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  // guarda la posición del toast en la pantalla
+  const [toastPosition, setToastPosition] = useState({
+    top: undefined,
+  });
+
+  // alert toast useEffect
+  useEffect(() => {
+    // actualiza toastPosition cada vez que el usuario desplaza la página.
+    const handleScroll = () => {
+      const position = window.pageYOffset + window.innerHeight / 2;
+      setToastPosition({
+        top: position,
+        left: "50%",
+        transform: "translateX(-50%)",
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [toastPosition.left]);
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -77,7 +71,9 @@ const FormAdd = () => {
       .catch((error) => {
         console.error(error);
       });
-    window.location.reload();
+
+    setShowToast(true);
+    setToastMessage("Gif añadido correctamente a fovoritos!!!");
   };
 
   const handleFileInputChange = (e) => {
@@ -98,7 +94,19 @@ const FormAdd = () => {
           televisión.
         </p>
       </article>
-      <article className="form-container">
+
+      {/* alert*/}
+      <div className="container-fluid mt-3">
+        <ToastAlert
+          style={{ top: 0, position: "fixed", left: toastPosition.left }}
+          show={showToast}
+          variant="success"
+          onClose={() => setShowToast(false)}
+          dismissible
+        >
+          <Alert.Heading>{toastMessage}</Alert.Heading>
+        </ToastAlert>
+
         <FormContainer>
           <Form onSubmit={handleSubmit} className="m-2">
             <Form.Group className="m-2">
@@ -126,16 +134,62 @@ const FormAdd = () => {
             </Button>
           </Form>
         </FormContainer>
-      </article>
-      <img src={filaGifs} alt="gifs"/>
+      </div>
+      <img src={filaGifs} alt="gifs" />
     </Wrapper>
   );
 };
 
+const FormContainer = styled(Container)`
+  background-color: #f8f9fa;
+  padding: 50px;
+  border-radius: 5px;
+`;
+
+const ToastAlert = styled(Alert)`
+  z-index: 1;
+`;
+
+const Wrapper = styled.section`
+  min-height: 60vh;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 4rem;
+  display: grid;
+  background: var(--clr-grey-10);
+  img {
+    width: 210%;
+  }
+
+  @media screen and (max-width: 799px) {
+    h2 {
+      font-size: 2.2rem;
+    }
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    img {
+      width: 100%;
+      height: 120%;
+    }
+  }
+  @media (min-width: 800px) {
+    grid-template-columns: repeat(2, 1fr);
+    height: calc(100vh - 5rem);
+    grid-gap: 4rem;
+    display: grid;
+    h2 {
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 0 1;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+  }
+`;
+
 export default FormAdd;
 
-{
-  /* <Form.Group className="m-2">
+/* <Form.Group className="m-2">
             <Form.Control
               type="text"
               placeholder="descripción"
@@ -152,4 +206,3 @@ export default FormAdd;
               onChange={(e) => setContent(e.target.value)}
             />
           </Form.Group> */
-}

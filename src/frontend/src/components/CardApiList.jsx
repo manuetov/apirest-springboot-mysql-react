@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AddFav from "./AddFav";
-import { Form, Button, Toast, Alert } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -15,13 +15,12 @@ const CardApiList = () => {
   const [file, setFile] = useState(null);
   const inputRef = useRef("");
 
-  const [showToast, setShowToast] = useState(true);
+  // alerts toast
+  const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   // guarda la posición del toast en la pantalla
   const [toastPosition, setToastPosition] = useState({
     top: undefined,
-    left: "40%",
-    transform: "translate(-50%, -50%",
   });
 
   const getGifs = () => {
@@ -37,13 +36,14 @@ const CardApiList = () => {
       .catch((error) => console.error(error));
   };
 
+  // alert toast
   useEffect(() => {
     getGifs();
 
     // actualiza toastPosition cada vez que el usuario desplaza la página.
     const handleScroll = () => {
       const position = window.pageYOffset + window.innerHeight /2;
-      setToastPosition({ top: position, left: toastPosition.left });
+      setToastPosition({ top: position, left: '50%', transform: 'translateX(-50%)' });
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -60,6 +60,7 @@ const CardApiList = () => {
       return () => clearTimeout(timer);
     }
   }, [showToast]);
+
 
   // buscar en la api
   const handleSubmit = (e) => {
@@ -225,6 +226,8 @@ const GifActions = styled.div`
 `;
 
 export default CardApiList;
+
+
 
 // const formData = new FormData()
 // formData.append("titulo", gif.title)

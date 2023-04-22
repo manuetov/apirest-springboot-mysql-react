@@ -1,4 +1,4 @@
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import styled from "styled-components";
 
 import axios from "axios";
@@ -15,27 +15,66 @@ const CardFavList = () => {
 
   const [formVisible, setFormVisible] = useState(false);
 
-  // estado para indicar si el cursor está sobre la tarjeta
-  // const [isHovered, setIsHovered] = useState(false);
-
   // para almacenar el índice de la card que tiene el ratón encima
   const [hoveredIndex, setHoveredIndex] = useState(-1);
 
+    // toast
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    // guarda la posición del toast en la pantalla
+    const [toastPosition, setToastPosition] = useState({
+      top: undefined
+    });
+
   const fetchAllMemes = async () => {
-    const res = await axios.get("http://localhost:8080/api/post");
-    console.log(res.data);
-    setMeme(res.data);
+    try{
+
+      const res = await axios.get("http://localhost:8080/api/post"
+      )
+      .then((res) => setMeme(res.data))
+      .catch((error) => console.error(error));;
+      console.log(res.data);
+    } catch (err){
+      console.log(err)
+    }
   };
 
   useEffect(() => {
     fetchAllMemes();
   }, []);
 
+
   // borrar
   const deleteMeme = async (id) => {
     await axios.delete(`http://localhost:8080/api/post/${id}`);
-    window.location.reload();
+    setShowToast(true);
+    setToastMessage("Gif eliminado correctamente!!!");
+  // Actualizamos la lista de tarjetas llamando a fetchAllMemes()
+  fetchAllMemes();
   };
+
+  // actualiza toastPosition cada vez que el usuario desplaza la página.
+  const handleScroll = () => {
+    const position = window.pageYOffset + window.innerHeight / 2;
+    setToastPosition({ top: position, left: '50%', transform: 'translateX(-50%)' });
+  };
+
+// Este useEffect configura el evento de desplazamiento
+useEffect(() => {
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [toastPosition.left]);
+
+useEffect(() => {
+  if (showToast) {
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }
+}, [showToast]);
 
   // actualizar
   const handleUpdateMeme = async (e, id, setFormVisible) => {
@@ -58,97 +97,103 @@ const CardFavList = () => {
           : meme
       )
     );
-    setUpdatedTitle('')
+    setUpdatedTitle("");
     setEditingMeme(null);
     setFormVisible(false);
+    setShowToast(true);
+    setToastMessage("Gif actualizado correctamente!!!");
   };
 
   return (
     <div className="cardPostList d-flex flex-wrap ">
-      <GifCards>
-        {memes.map((meme, index) => (
-          <GifCard 
-            key={index}
-            onMouseEnter={() => setHoveredIndex(index)} // Manejar evento onMouseEnter para indicar que el cursor está sobre la tarjeta
-            onMouseLeave={() => setHoveredIndex(-1)} // Manejar evento onMouseLeave para indicar que el cursor ya no está sobre la tarjeta
-            // isHovered={isHovered} // Paso el estado isHovered como prop a la componente GifCard
-            // setIsHovered={setIsHovered} // Paso la función setIsHovered como prop a la componente GifCard
-          >
-            <GifImage src={`${img_URL}${meme.imagen}`} alt={meme.titulo} />
-            <GifTitle >{meme.titulo}</GifTitle>
-            {/* <GifContent >{meme.contenido}</GifContent>
+      {/* alert*/}
+      <div className="container-fluid mt-3">
+        <ToastAlert
+          style={{ top: 0, position: "fixed", left: toastPosition.left }}
+          show={showToast}
+          variant="success"
+          onClose={() => setShowToast(false)}
+          dismissible
+        >
+          <Alert.Heading>{toastMessage}</Alert.Heading>
+        </ToastAlert>
+
+        <GifCards>
+          {memes.map((meme, index) => (
+            <GifCard
+              key={index}
+              onMouseEnter={() => setHoveredIndex(index)} // Manejar evento onMouseEnter para indicar que el cursor está sobre la tarjeta
+              onMouseLeave={() => setHoveredIndex(-1)} // Manejar evento onMouseLeave para indicar que el cursor ya no está sobre la tarjeta
+              // isHovered={isHovered} // Paso el estado isHovered como prop a la componente GifCard
+              // setIsHovered={setIsHovered} // Paso la función setIsHovered como prop a la componente GifCard
+            >
+              <GifImage src={`${img_URL}${meme.imagen}`} alt={meme.titulo} />
+              <GifTitle>{meme.titulo}</GifTitle>
+              {/* <GifContent >{meme.contenido}</GifContent>
             <GifDescription >{meme.descripcion}</GifDescription> */}
-            <GifActions className="gif-actions">
-            {hoveredIndex === index && ( // Mostrar los botones de borrar y actualizar sólo si isHovered es true
-                <>
-              <button
-                size="sm"
-                variant="danger"
-                className="m-1"
-                onClick={() => deleteMeme(meme.id)}
-              >
-                borrar
-              </button>
+              <GifActions className="gif-actions">
+                {/* {console.log(hoveredIndex)} */}
+                {hoveredIndex === index && ( // Mostrar los botones de borrar y actualizar sólo si isHovered es true
+                  <>
+                    <button
+                      size="sm"
+                      variant="danger"
+                      className="m-1"
+                      onClick={() => deleteMeme(meme.id)}
+                    >
+                      borrar
+                    </button>
 
-              <button
-                size="sm"
-                variant="success"
-                className="m-1"
-                onClick={() => setEditingMeme(meme)}
-              >
-                actualizar
-              </button>
-              </>
-            )}
-              {/* {console.log(meme,editingMeme,editingMeme && editingMeme.Id === meme.id )} */}
-              {hoveredIndex === index && editingMeme && editingMeme.id === meme.id && (
-                <Form
-                  onSubmit={(e) => handleUpdateMeme(e, meme.id, setFormVisible)}
-                >
-                  <Form.Group className="m-2">
-                    <Form.Control
-                      type="text"
-                      placeholder="titulo"
-                      value={updatedTitle}
-                      onChange={(e) => setUpdatedTitle(e.target.value)}
-                    />
-                  </Form.Group>
+                    <button
+                      size="sm"
+                      variant="success"
+                      className="m-1"
+                      onClick={() => setEditingMeme(meme)}
+                    >
+                      actualizar
+                    </button>
+                  </>
+                )}
+                {/* {console.log(meme,editingMeme,editingMeme && editingMeme.Id === meme.id )}  */}
+                {hoveredIndex === index &&
+                  editingMeme &&
+                  editingMeme.id === meme.id && (
+                    <Form
+                      onSubmit={(e) =>
+                        handleUpdateMeme(e, meme.id, setFormVisible)
+                      }
+                    >
+                      <Form.Group className="m-2">
+                        <Form.Control
+                          type="text"
+                          placeholder="titulo"
+                          value={updatedTitle}
+                          onChange={(e) => setUpdatedTitle(e.target.value)}
+                        />
+                      </Form.Group>
 
-                  {/* <Form.Group className="m-2">
-                    <Form.Control
-                      type="text"
-                      placeholder="descripcion"
-                      value={updatedDescription}
-                      onChange={(e) => setUpdatedDescription(e.target.value)}
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="m-2">
-                    <Form.Control
-                      type="text"
-                      placeholder="contenido"
-                      value={updatedContent}
-                      onChange={(e) => setUpdatedContent(e.target.value)}
-                    />
-                  </Form.Group> */}
-
-                  <button
-                    variant="primary"
-                    type="submit"
-                    size="sm"
-                    className="m-2"
-                  >
-                    guardar
-                  </button>
-                </Form>
-              )}
-            </GifActions>
-          </GifCard>
-        ))}
-      </GifCards>
+                      <button
+                        variant="primary"
+                        type="submit"
+                        size="sm"
+                        className="m-2"
+                      >
+                        guardar
+                      </button>
+                    </Form>
+                  )}
+              </GifActions>
+            </GifCard>
+          ))}
+        </GifCards>
+      </div>
     </div>
   );
 };
+
+const ToastAlert = styled(Alert)`
+  z-index: 1;
+`;
 
 const GifCards = styled.div`
   display: flex;
@@ -186,36 +231,6 @@ const GifTitle = styled.h3`
   transition: transform 0.2s ease-in-out;
 `;
 
-// const GifContent = styled.h4`
-//   position: absolute;
-//   bottom: 10%;
-//   left: 0;
-//   width: 100%;
-//   margin: 0;
-//   padding: 10px;
-//   font-size: 1.2rem;
-//   color: white;
-//   background-color: rgba(0, 0, 0, 0.7);
-//   border-radius: 0 0 5px 5px;
-//   transform: translateY(100%);
-//   transition: transform 0.2s ease-in-out;
-// `;
-
-// const GifDescription = styled.h4`
-//   position: absolute;
-//   bottom: -1%;
-//   left: 0;
-//   width: 100%;
-//   margin: 0;
-//   padding: 10px;
-//   font-size: 1.2rem;
-//   color: white;
-//   background-color: rgba(0, 0, 0, 0.7);
-//   border-radius: 0 0 5px 5px;
-//   transform: translateY(100%);
-//   transition: transform 0.2s ease-in-out;
-// `;
-
 const GifActions = styled.div`
   position: absolute;
   top: 0;
@@ -245,3 +260,53 @@ const GifActions = styled.div`
   }
 `;
 export default CardFavList;
+
+{
+  /* <Form.Group className="m-2">
+                    <Form.Control
+                      type="text"
+                      placeholder="descripcion"
+                      value={updatedDescription}
+                      onChange={(e) => setUpdatedDescription(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="m-2">
+                    <Form.Control
+                      type="text"
+                      placeholder="contenido"
+                      value={updatedContent}
+                      onChange={(e) => setUpdatedContent(e.target.value)}
+                    />
+                  </Form.Group> */
+}
+
+// const GifContent = styled.h4`
+//   position: absolute;
+//   bottom: 10%;
+//   left: 0;
+//   width: 100%;
+//   margin: 0;
+//   padding: 10px;
+//   font-size: 1.2rem;
+//   color: white;
+//   background-color: rgba(0, 0, 0, 0.7);
+//   border-radius: 0 0 5px 5px;
+//   transform: translateY(100%);
+//   transition: transform 0.2s ease-in-out;
+// `;
+
+// const GifDescription = styled.h4`
+//   position: absolute;
+//   bottom: -1%;
+//   left: 0;
+//   width: 100%;
+//   margin: 0;
+//   padding: 10px;
+//   font-size: 1.2rem;
+//   color: white;
+//   background-color: rgba(0, 0, 0, 0.7);
+//   border-radius: 0 0 5px 5px;
+//   transform: translateY(100%);
+//   transition: transform 0.2s ease-in-out;
+// `;
