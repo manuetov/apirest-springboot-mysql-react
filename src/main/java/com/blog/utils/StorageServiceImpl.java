@@ -19,14 +19,6 @@ public class StorageServiceImpl implements StorageService{
     @Value("${spring.servlet.multipart.location}")
     private String BASEPATH;
 
-/*
-    @Override
-    public List<String> loadAll() {
-        File dirPath = new File(BASEPATH);
-        return Arrays.asList(dirPath.list());
-    }
-*/
-
     @Override
     public String store(MultipartFile imagen) {
         System.out.println(imagen.getOriginalFilename());
@@ -55,3 +47,12 @@ public class StorageServiceImpl implements StorageService{
     }
 
 }
+
+
+/*
+    @Override
+    public List<String> loadAll() {
+        File dirPath = new File(BASEPATH);
+        return Arrays.asList(dirPath.list());
+    }
+*/

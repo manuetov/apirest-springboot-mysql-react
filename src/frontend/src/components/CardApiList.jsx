@@ -56,7 +56,7 @@ const CardApiList = () => {
     if (showToast) {
       const timer = setTimeout(() => {
         setShowToast(false);
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [showToast]);

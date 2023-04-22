@@ -10,8 +10,6 @@ const CardFavList = () => {
 
   const [editingMeme, setEditingMeme] = useState(null);
   const [updatedTitle, setUpdatedTitle] = useState("");
-  const [updatedDescription, setUpdatedDescription] = useState("");
-  const [updatedContent, setUpdatedContent] = useState("");
 
   const [formVisible, setFormVisible] = useState(false);
 
@@ -81,8 +79,8 @@ useEffect(() => {
     e.preventDefault();
     await axios.put(`http://localhost:8080/api/post/${id}`, {
       titulo: updatedTitle,
-      descripcion: updatedDescription,
-      contenido: updatedContent,
+      // descripcion: updatedDescription,
+      // contenido: updatedContent,
     });
     // seteo el estado
     setMeme((prevMemes) =>

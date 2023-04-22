@@ -3,10 +3,15 @@ package com.blog.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 // @UniqueConstraint => no permite titulo repetido
 @Table(name ="posts", uniqueConstraints = {@UniqueConstraint(columnNames = {"titulo"})})
@@ -19,12 +24,6 @@ public class PostBlog {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
-
-    @Column(name = "contenido", nullable = false)
-    private String contenido;
-
     private String imagen;
 
     /* relación -> una publicación puede tener muchos comentarios */
@@ -34,20 +33,31 @@ public class PostBlog {
     /* lista de comentarios - HashSet almacena elementos únicos sin duplicados*/
     private Set<Comments> comments = new HashSet<>();
 
-    public PostBlog() {};
 
-    public PostBlog(Long id, String titulo, String descripcion, String contenido) {
+
+
+}
+
+/*    @Column(name = "descripcion", nullable = false)
+    private String descripcion;
+
+    @Column(name = "contenido", nullable = false)
+    private String contenido;*/
+
+/*    public PostBlog(Long id, String titulo, String descripcion, String contenido) {
         this.id = id;
         this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.contenido = contenido;
+*//*        this.descripcion = descripcion;
+        this.contenido = contenido;*//*
     }
+
+     public PostBlog() {};
 
     public PostBlog(Long id, String titulo, String descripcion, String contenido, String imagen) {
         this.id = id;
         this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.contenido = contenido;
+*//*        this.descripcion = descripcion;
+        this.contenido = contenido;*//*
         this.imagen = imagen;
     }
 
@@ -75,6 +85,7 @@ public class PostBlog {
         this.titulo = titulo;
     }
 
+*//*
     public String getDescripcion() {
         return descripcion;
     }
@@ -98,16 +109,16 @@ public class PostBlog {
     public void setComments(Set<Comments> comments) {
         this.comments = comments;
     }
+*//*
 
     @Override
     public String toString() {
         return "PostBlog{" +
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", contenido='" + contenido + '\'' +
+*//*                ", descripcion='" + descripcion + '\'' +
+                ", contenido='" + contenido + '\'' +*//*
                 ", imagen=" + imagen +
-                ", comments=" + comments +
+*//*                ", comments=" + comments +*//*
                 '}';
-    }
-}
+    }*/
