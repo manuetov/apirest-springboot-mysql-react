@@ -43,6 +43,14 @@ const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: .5rem 1rem;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: fixed;
+  z-index: 1;
+  width: 100%;
 
   .nav-center {
     width: 90vw;
@@ -71,7 +79,7 @@ const NavContainer = styled.nav`
     display: none;
   }
 
-  @media (min-width: 650px) {
+  @media (min-width: 850px) {
     .nav-toggle {
       display: none;
     }
@@ -83,12 +91,13 @@ const NavContainer = styled.nav`
     .nav-links {
       display: flex;
       justify-content: center;
+      margin-bottom: 0;
       li {
         margin: 0 0.5rem;
       }
       a {
         color: var(--clr-grey-3);
-        font-size: 1rem;
+        font-size: 1.5rem;
         text-transform: capitalize;
         letter-spacing: var(--spacing);
         padding: 0.5rem;

@@ -7,7 +7,8 @@ Variables
 :root {
   /* INDIGO */
   /* dark shades of primary color*/
-  --clr-primary-1: #312e81;
+  /* --clr-primary-1: #312e81; */
+  --clr-primary-1: #c626ff;
   --clr-primary-2: #3730a3;
   --clr-primary-3: #4338ca;
   --clr-primary-4: #4f46e5;
@@ -33,9 +34,11 @@ Variables
   --clr-grey-9: #f1f5f9;
   --clr-grey-10: #f8fafc;
   --clr-white: #fff;
+  --clr-purple-light: hsl(284, 100%, 58%);
   --clr-grey-cream: hsl(37, 10%, 69%);
-  --clr-red-dark: hsl(360, 67%, 44%);
+  --clr-red-dark: hsl(360, 67%, 44%); 
   --clr-red-light: hsl(360, 71%, 66%);
+  --clr-blue-light: hsl(183, 100%, 43%);
   --clr-green-dark: hsl(125, 67%, 44%);
   --clr-green-light: hsl(125, 71%, 66%);
   --clr-black: #222;

@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import PageHero from "./PageHero";
+
 
 const CardFavList = () => {
   const [memes, setMeme] = useState([]);
@@ -16,24 +18,23 @@ const CardFavList = () => {
   // para almacenar el índice de la card que tiene el ratón encima
   const [hoveredIndex, setHoveredIndex] = useState(-1);
 
-    // toast
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
-    // guarda la posición del toast en la pantalla
-    const [toastPosition, setToastPosition] = useState({
-      top: undefined
-    });
+  // toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  // guarda la posición del toast en la pantalla
+  const [toastPosition, setToastPosition] = useState({
+    top: undefined,
+  });
 
   const fetchAllMemes = async () => {
-    try{
-
-      const res = await axios.get("http://localhost:8080/api/post"
-      )
-      .then((res) => setMeme(res.data))
-      .catch((error) => console.error(error));;
+    try {
+      const res = await axios
+        .get("http://localhost:8080/api/post")
+        .then((res) => setMeme(res.data))
+        .catch((error) => console.error(error));
       console.log(res.data);
-    } catch (err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -41,46 +42,51 @@ const CardFavList = () => {
     fetchAllMemes();
   }, []);
 
+   // Invertir el orden del arreglo de memes
+   const invertedMemes = [...memes].reverse();
 
   // borrar
   const deleteMeme = async (id) => {
     await axios.delete(`http://localhost:8080/api/post/${id}`);
     setShowToast(true);
     setToastMessage("Gif eliminado correctamente!!!");
-  // Actualizamos la lista de tarjetas llamando a fetchAllMemes()
-  fetchAllMemes();
+    // Actualizamos la lista de tarjetas llamando a fetchAllMemes()
+    fetchAllMemes();
   };
 
   // actualiza toastPosition cada vez que el usuario desplaza la página.
   const handleScroll = () => {
     const position = window.pageYOffset + window.innerHeight / 2;
-    setToastPosition({ top: position, left: '50%', transform: 'translateX(-50%)' });
+    setToastPosition({
+      top: position,
+      left: "50%",
+      transform: "translateX(-50%)",
+    });
   };
 
-// Este useEffect configura el evento de desplazamiento
-useEffect(() => {
-  window.addEventListener("scroll", handleScroll);
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, [toastPosition.left]);
+  // Este useEffect configura el evento de desplazamiento
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [toastPosition.left]);
 
-useEffect(() => {
-  if (showToast) {
-    const timer = setTimeout(() => {
-      setShowToast(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }
-}, [showToast]);
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   // actualizar
   const handleUpdateMeme = async (e, id, setFormVisible) => {
     e.preventDefault();
     await axios.put(`http://localhost:8080/api/post/${id}`, {
       titulo: updatedTitle,
-      // descripcion: updatedDescription,
-      // contenido: updatedContent,
+
     });
     // seteo el estado
     setMeme((prevMemes) =>
@@ -89,8 +95,6 @@ useEffect(() => {
           ? {
               ...meme,
               titulo: updatedTitle || null,
-              // descripcion: updatedDescription || null,
-              // contenido: updatedContent || null,
             }
           : meme
       )
@@ -103,7 +107,8 @@ useEffect(() => {
   };
 
   return (
-    <div className="cardPostList d-flex flex-wrap ">
+    <div className="d-flex flex-wrap">
+      <PageHero title="Favoritos"/>
       {/* alert*/}
       <div className="container-fluid mt-3">
         <ToastAlert
@@ -117,7 +122,7 @@ useEffect(() => {
         </ToastAlert>
 
         <GifCards>
-          {memes.map((meme, index) => (
+          {invertedMemes.map((meme, index) => (
             <GifCard
               key={index}
               onMouseEnter={() => setHoveredIndex(index)} // Manejar evento onMouseEnter para indicar que el cursor está sobre la tarjeta
@@ -127,8 +132,7 @@ useEffect(() => {
             >
               <GifImage src={`${img_URL}${meme.imagen}`} alt={meme.titulo} />
               <GifTitle>{meme.titulo}</GifTitle>
-              {/* <GifContent >{meme.contenido}</GifContent>
-            <GifDescription >{meme.descripcion}</GifDescription> */}
+
               <GifActions className="gif-actions">
                 {/* {console.log(hoveredIndex)} */}
                 {hoveredIndex === index && ( // Mostrar los botones de borrar y actualizar sólo si isHovered es true
@@ -222,8 +226,8 @@ const GifTitle = styled.h3`
   margin: 0;
   padding: 10px;
   font-size: 1.2rem;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--clr-grey-10);
+  background-color: var(--clr-grey-4);
   border-radius: 0 0 5px 5px;
   transform: translateY(100%);
   transition: transform 0.2s ease-in-out;
@@ -247,12 +251,13 @@ const GifActions = styled.div`
   & > button {
     border: none;
     background-color: transparent;
-    color: #ce07b3;
+    font-weight: bold;
+    color: var(--clr-purple-light);
     padding: 3px;
     border-radius: 10px;
     cursor: pointer;
     &:hover {
-      background-color: rgb(37, 61, 61);
+      background-color: var(--clr-primary-5);
       color: white;
     }
   }

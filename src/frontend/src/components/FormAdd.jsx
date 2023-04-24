@@ -3,8 +3,10 @@ import axios from "axios";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import filaGifs from "../assets/fila-gifs.gif";
+import PageHero from "./PageHero";
 
-const FormAdd = () => {
+
+const FormAdd = ({novermiga}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
@@ -84,6 +86,8 @@ const FormAdd = () => {
 
   return (
     <Wrapper className="section">
+      <div>
+       {novermiga || <PageHero title="Añadir memes"/>}
       <article className="content">
         <h2>quieres guardar tus propios gifs? súbelos!!</h2>
         <p>
@@ -94,7 +98,7 @@ const FormAdd = () => {
           televisión.
         </p>
       </article>
-
+      
       {/* alert*/}
       <div className="container-fluid mt-3">
         <ToastAlert
@@ -136,6 +140,7 @@ const FormAdd = () => {
         </FormContainer>
       </div>
       <img src={filaGifs} alt="gifs" />
+      </div>
     </Wrapper>
   );
 };
@@ -152,38 +157,12 @@ const ToastAlert = styled(Alert)`
 
 const Wrapper = styled.section`
   min-height: 60vh;
-  grid-template-columns: repeat(2, 1fr);
+
   grid-gap: 4rem;
   display: grid;
   background: var(--clr-grey-10);
   img {
-    width: 210%;
-  }
-
-  @media screen and (max-width: 799px) {
-    h2 {
-      font-size: 2.2rem;
-    }
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    img {
-      width: 100%;
-      height: 120%;
-    }
-  }
-  @media (min-width: 800px) {
-    grid-template-columns: repeat(2, 1fr);
-    height: calc(100vh - 5rem);
-    grid-gap: 4rem;
-    display: grid;
-    h2 {
-      margin-bottom: 2rem;
-      text-align: center;
-      text-shadow: 0 1;
-    }
-    p {
-      font-size: 1.25rem;
-    }
+    width: 100%;
   }
 `;
 

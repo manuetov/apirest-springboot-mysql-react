@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import AddFav from "./AddFav";
 import { Form, Button, Alert } from "react-bootstrap";
+import PageHero from "./PageHero";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -10,8 +11,6 @@ const CardApiList = () => {
   const [gifs, setGifs] = useState([]);
 
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const inputRef = useRef("");
 
@@ -28,7 +27,7 @@ const CardApiList = () => {
       .get("https://api.giphy.com/v1/gifs/trending", {
         params: {
           api_key: APIKEY,
-          limit: 25,
+          limit: 100,
           rating: "g",
         },
       })
@@ -71,14 +70,14 @@ const CardApiList = () => {
         params: {
           api_key: APIKEY,
           q: inputValue,
-          limit: 25,
+          limit: 50,
         },
       })
       .then((response) => setGifs(response.data.data))
       .catch((error) => console.error(error));
   };
 
-  // añadir a favoritos
+  // añadir a favoritos 
   const handleFavorite = async (gif) => {
     const { data } = await axios.get(gif.images.fixed_height.url, {
       responseType: "blob",
@@ -86,8 +85,6 @@ const CardApiList = () => {
 
     const formData = new FormData();
     formData.append("titulo", gif.title);
-    formData.append("descripcion", "");
-    formData.append("contenido", "");
     formData.append("imagen", data, "image.gif");
 
     // Envio formData al servidor
@@ -96,11 +93,15 @@ const CardApiList = () => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setTitle("");
-        setDescription("");
-        setContent("");
         setFile(null);
+
+        // Verifica si el gif ya existe en el estado antes de agregarlo
+        const gifExists = gifs.some(existingGif => existingGif.id === gif.id)
+        if(!gifExists) {
+          setGifs(prevGifs => [gif, ...prevGifs])
+        }
       })
       .catch((error) => console.error(error));
 
@@ -109,19 +110,17 @@ const CardApiList = () => {
   };
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit} className="m-2">
-        <Form.Group className="m-2">
-          <Form.Control
-            type="text"
-            placeholder="Introduce un texto "
-            ref={inputRef}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" size="sm" className="m-2">
-          buscar
-        </Button>
-      </Form>
+    <div className="d-flex flex-wrap">
+      <PageHero title='Buscar memes'/>
+      <MyForm onSubmit={handleSubmit}>
+      <MyInput
+        type="text"
+        placeholder="Introduce un texto"
+        ref={inputRef}
+      />
+      <MyButton type="submit">buscar</MyButton>
+    </MyForm>
+      
 
       {/* alert*/}
       <div className="container-fluid mt-3">
@@ -151,13 +150,44 @@ const CardApiList = () => {
             ))}
           </GifCards>
         </div>
-     
     </div>
   );
 };
 
 const ToastAlert = styled(Alert)`
   z-index: 1;
+`;
+
+const MyForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  margin-top:1rem;
+`;
+
+const MyInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+`;
+
+const MyButton = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const GifCards = styled.div`
