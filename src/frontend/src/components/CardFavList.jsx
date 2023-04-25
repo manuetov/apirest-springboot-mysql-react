@@ -179,7 +179,7 @@ const CardFavList = () => {
                         size="sm"
                         className="m-2"
                       >
-                        guardar
+                        <StyledButton>guardar</StyledButton>
                       </button>
                     </Form>
                   )}
@@ -226,6 +226,11 @@ const GifTitle = styled.h3`
   margin: 0;
   padding: 10px;
   font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  height: 70px; /* Establece una altura fija para el título */
   color: var(--clr-grey-10);
   background-color: var(--clr-grey-4);
   border-radius: 0 0 5px 5px;
@@ -262,6 +267,22 @@ const GifActions = styled.div`
     }
   }
 `;
+
+const StyledButton = styled.button`
+  background-color: var(--clr-primary-2);
+  color: var(--clr-grey-10);
+  border: none;
+  font-size: 1.2rem;
+  padding: .2rem .2rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--clr-primary-1);
+  }
+`;
+
+
 export default CardFavList;
 
 {

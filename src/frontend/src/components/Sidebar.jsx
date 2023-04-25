@@ -43,7 +43,7 @@ const SidebarContainer = styled.div`
     padding: 1rem 1.5rem;
   }
   .close-btn {
-    font-size: 2rem;
+    font-size: 2.5rem;
     background: transparent;
     border-color: transparent;
     color: var(--clr-primary-5);
@@ -62,7 +62,7 @@ const SidebarContainer = styled.div`
   .links a {
     display: block;
     text-align: left;
-    font-size: 1rem;
+    font-size: 2rem;
     text-transform: capitalize;
     padding: 1rem 1.5rem;
     color: var(--clr-grey-3);
@@ -73,8 +73,8 @@ const SidebarContainer = styled.div`
   .links a:hover {
     padding: 1rem 1.5rem;
     padding-left: 2rem;
-    background: var(--clr-grey-10);
-    color: var(--clr-grey-2);
+    background: var(--clr-primary-1);
+    color: var(--clr-grey-10);
   }
 
   .sidebar {
@@ -83,7 +83,9 @@ const SidebarContainer = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--clr-white);
+    background: rgba(122, 131, 165, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     transition: var(--transition);
     transform: translate(-100%);
     z-index: -1;

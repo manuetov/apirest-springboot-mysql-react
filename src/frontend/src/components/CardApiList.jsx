@@ -226,6 +226,11 @@ const GifTitle = styled.h3`
   border-radius: 0 0 5px 5px;
   transform: translateY(100%);
   transition: transform 0.2s ease-in-out;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden; 
+  height: 70px;
 `;
 
 const GifActions = styled.div`
