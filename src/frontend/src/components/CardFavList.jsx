@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import PageHero from "./PageHero";
-
+import Footer from "./Footer";
 
 const CardFavList = () => {
   const [memes, setMeme] = useState([]);
@@ -42,8 +42,8 @@ const CardFavList = () => {
     fetchAllMemes();
   }, []);
 
-   // Invertir el orden del arreglo de memes
-   const invertedMemes = [...memes].reverse();
+  // Invertir el orden del arreglo de memes
+  const invertedMemes = [...memes].reverse();
 
   // borrar
   const deleteMeme = async (id) => {
@@ -86,7 +86,6 @@ const CardFavList = () => {
     e.preventDefault();
     await axios.put(`http://localhost:8080/api/post/${id}`, {
       titulo: updatedTitle,
-
     });
     // seteo el estado
     setMeme((prevMemes) =>
@@ -108,7 +107,7 @@ const CardFavList = () => {
 
   return (
     <div className="d-flex flex-wrap">
-      <PageHero title="Favoritos"/>
+      <PageHero title="Favoritos" />
       {/* alert*/}
       <div className="container-fluid mt-3">
         <ToastAlert
@@ -188,6 +187,7 @@ const CardFavList = () => {
             </GifCard>
           ))}
         </GifCards>
+        <Footer />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import AddFav from "./AddFav";
 import { Form, Button, Alert } from "react-bootstrap";
 import PageHero from "./PageHero";
+import Footer from "./Footer";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -111,7 +112,7 @@ const CardApiList = () => {
 
   return (
     <div className="d-flex flex-wrap">
-      <PageHero title='Buscar memes'/>
+      <PageHero title='Buscar gifs'/>
       <MyForm onSubmit={handleSubmit}>
       <MyInput
         type="text"
@@ -149,6 +150,7 @@ const CardApiList = () => {
               </GifCard>
             ))}
           </GifCards>
+          <Footer />
         </div>
     </div>
   );

@@ -12,12 +12,12 @@ export const links = [
    },
    {
       id: 3,
-      text: "buscar memes",
+      text: "buscar gifs",
       url:"/buscar"
    },
    {
       id:4,
-      text: "añadir meme",
+      text: "añadir gif",
       url:"/addMeme"
    },
 ]

@@ -87,7 +87,7 @@ const FormAdd = ({novermiga}) => {
   return (
     <Wrapper className="section">
       <div>
-       {novermiga || <PageHero title="Añadir memes"/>}
+       {novermiga || <PageHero title="Añadir gif"/>}
       <article className="content">
         <h2>quieres guardar tus propios gifs? súbelos!!</h2>
         <p>
