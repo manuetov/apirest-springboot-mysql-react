@@ -20,4 +20,9 @@ export const links = [
       text: "añadir gif",
       url:"/addMeme"
    },
+   {
+      id:5,
+      text: "users",
+      url: "/users"
+   }
 ]

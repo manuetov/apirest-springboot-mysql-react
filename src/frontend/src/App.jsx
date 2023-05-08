@@ -1,6 +1,7 @@
 import { NavBar, CardFavList, FormAdd, Sidebar, CardApiList } from "./components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import  HomePage from './pages/HomePage'
+import UsersPage from "./pages/UsersPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/buscar' element={<CardApiList />} /> 
         <Route path='/favorites' element={<CardFavList />} />
         <Route path='/addmeme' element={<FormAdd />} />
+        <Route path='/users' element={<UsersPage />} />
         {/* <Route path="*" element={<Error />} /> */}  
       </Routes>
 

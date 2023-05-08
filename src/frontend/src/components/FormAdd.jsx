@@ -85,10 +85,10 @@ const FormAdd = ({novermiga}) => {
   };
 
   return (
-    <Wrapper className="section">
-      <div>
+    <div className="d-flex flex-wrap">
+      <Wrapper>
        {novermiga || <PageHero title="Añadir gif"/>}
-      <article className="content">
+      <StyledArticle className="content">
         <h2>quieres guardar tus propios gifs? súbelos!!</h2>
         <p>
           Los GIFs son una secuencia de imágenes animadas que se repiten en
@@ -97,7 +97,7 @@ const FormAdd = ({novermiga}) => {
           o para hacer referencia a escenas famosas de películas o programas de
           televisión.
         </p>
-      </article>
+      </StyledArticle>
       
       {/* alert*/}
       <div className="container-fluid mt-3">
@@ -140,14 +140,17 @@ const FormAdd = ({novermiga}) => {
         </FormContainer>
       </div>
       <img src={filaGifs} alt="gifs" />
+      </Wrapper>
       </div>
-    </Wrapper>
+    
   );
 };
 
+const StyledArticle = styled.article`
+  padding: 2rem 4rem 0 4rem;
+`;
 const FormContainer = styled(Container)`
   background-color: #f8f9fa;
-  padding: 50px;
   border-radius: 5px;
 `;
 
@@ -159,10 +162,12 @@ const Wrapper = styled.section`
   min-height: 60vh;
 
   grid-gap: 4rem;
+
   display: grid;
   background: var(--clr-grey-10);
   img {
     width: 100%;
+    padding: 2rem;
   }
 `;
 
