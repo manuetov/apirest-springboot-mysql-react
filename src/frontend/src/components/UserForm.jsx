@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 
 
-const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser }) => {
+const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser, handlerCloseForm }) => {
 
   const [userForm, setUserForm] = useState(initialUserForm);
 
@@ -47,7 +47,7 @@ const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <h2>Formulario add user</h2>
+      <h4>Crear nuevo usuario</h4>
       <input
         className="form-control my-3 w-75"
         placeholder="Username"
@@ -82,7 +82,14 @@ const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser }) => {
         type="submit"
 
       >
-        { id > 0 ? 'Editar' : 'Crear'}
+        { id > 0 ? 'Actualizar' : 'Crear'}
+      </button>
+      <button 
+        className="btn btn-primary mx-5"
+        type="button"
+        onClick={handlerCloseForm}
+      >
+        Cerrar
       </button>
     </form>
   );

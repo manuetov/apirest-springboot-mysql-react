@@ -7,10 +7,13 @@ const UsersPage = () => {
     users,
     userSelected,
     initialUserForm,
+    visibleForm,
     // funciones
     handlerAddUsers,
     handlerRemoveUsers,
     handlerUserSelectedForm,
+    handlerOpenForm,
+    handlerCloseForm
 
     // hooks personalizado
   } = useUsers();
@@ -20,25 +23,39 @@ const UsersPage = () => {
       <PageHero title="Añadir users" />
       <div className="container my-4">
         <div className="row">
-          <div className="col-md-4">
-            {users === 0 ? (
-              <div className="alert alert-warning">
-                no hay usuarios resgistrados
-              </div>
-            ) : (
+          {!visibleForm || (
+            <div className="col-md-4">
               <UserForm
                 initialUserForm={initialUserForm}
                 handlerAddUsers={handlerAddUsers}
                 selectedUser={userSelected}
+                handlerCloseForm={handlerCloseForm}
+              />
+            </div>
+          )}
+
+          <div className="col">
+            {visibleForm || (
+              <button 
+                className="btn btn-primary"
+                onClick = {handlerOpenForm}
+              >
+                Nuevo usuario
+              </button>
+            )}
+
+            {users.length === 0 ? (
+              <div className="alert alert-warning">
+                {" "}
+                No hay usuarios en el sistema!
+              </div>
+            ) : (
+              <UsersList
+                users={users}
+                handlerRemoveUsers={handlerRemoveUsers}
+                handlerUserSelectedForm={handlerUserSelectedForm}
               />
             )}
-          </div>
-          <div className="col-md-8 ">
-            <UsersList
-              users={users}
-              handlerRemoveUsers={handlerRemoveUsers}
-              handlerUserSelectedForm={handlerUserSelectedForm}
-            />
           </div>
         </div>
       </div>

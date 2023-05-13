@@ -28,17 +28,20 @@ export const useUsers = (user) => {
   const [users, dispatch] = useReducer(user_reducer, initialUsers);
   // guarda los datos del usuario para actulizarlos
   const [userSelected, setuserSelected] = useState(initialUserForm);
+  // formulario visible/no visible
+  const [visibleForm, setvisibleForm] = useState(false)
 
   // añade/actualiza usuario desde userform
   const handlerAddUsers = (user) => {
-    let type;
-    if (user.id === 0) {
-      type = "addUser";
-    } else {
-      type = "updateUser";
-    }
+   //  let type;
+   //  if (user.id === 0) {
+   //    type = "addUser";
+   //  } else {
+   //    type = "updateUser";
+   //  }
+
     dispatch({
-      type: type,
+      type: (user.id === 0) ? "addUser" : "updateUser",
       payload: user,
     });
 
@@ -49,6 +52,7 @@ export const useUsers = (user) => {
         : "Usuario ha sido actualizado correctamente!!",
       "success"
     );
+    handlerCloseForm()
   };
 
   const handlerRemoveUsers = (id) => {
@@ -76,17 +80,33 @@ export const useUsers = (user) => {
   // datos del usuario seleccionado para update
   const handlerUserSelectedForm = (user) => {
     console.log(user);
+    setvisibleForm(true)
     setuserSelected({ ...user });
   };
+
+  // handlers visible/no form
+  const handlerOpenForm = () => {
+   setvisibleForm(true)
+  }
+
+  const handlerCloseForm = () => {
+   setvisibleForm(false)
+   // limpia el formulario
+   setuserSelected(initialUserForm)
+  }
 
   return {
     // atributos o propiedades
     users,
     userSelected,
     initialUserForm,
+    visibleForm,
     // funciones
     handlerAddUsers,
     handlerRemoveUsers,
     handlerUserSelectedForm,
+    handlerOpenForm,
+    handlerCloseForm
+
   };
 };
