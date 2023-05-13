@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 
 
@@ -22,7 +23,12 @@ const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser }) => {
     event.preventDefault();
     // en editar no se incluye el campo password 
     if (!username || !email || ( !password && id === 0 )) {
-      alert("debe completar todos los campos del forumulario");
+      Swal.fire({
+        icon: 'error de validación',
+        title: 'Oops...',
+        text: 'ha dejado un campo vacío en el formulario!',
+        footer: '<a href="">Debe rellenar todos los campos</a>'
+      })
       return;
     }
     console.log(userForm);

@@ -1,6 +1,4 @@
-import React, { useReducer, useState } from "react";
 import { UsersList, UserForm, PageHero } from "../components";
-import { user_reducer } from "../reducers/user_reducer";
 import { useUsers } from "../hooks/useUsers";
 
 const UsersPage = () => {
