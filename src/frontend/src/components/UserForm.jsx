@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const initialUserForm = {
-   username: "",
-   password: "",
-   email: "",
- }
 
-const UserForm = ({ handlerAddUsers }) => {
+
+const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser }) => {
 
   const [userForm, setUserForm] = useState(initialUserForm);
 
-  const { username, email, password } = userForm;
+  const { id, username, email, password } = userForm;
 
   const onInputChange = ({ target }) => {
     console.log(target.value);
@@ -24,7 +20,8 @@ const UserForm = ({ handlerAddUsers }) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    if (!username || !email || !password) {
+    // en editar no se incluye el campo password 
+    if (!username || !email || ( !password && id === 0 )) {
       alert("debe completar todos los campos del forumulario");
       return;
     }
@@ -33,6 +30,14 @@ const UserForm = ({ handlerAddUsers }) => {
     handlerAddUsers(userForm);
     setUserForm(initialUserForm);
   };
+
+  // cuando se hace click en update
+  useEffect(()=> {
+      setUserForm({
+         ...selectedUser,
+         password: ''
+      })
+  }, [selectedUser])
 
   return (
     <form onSubmit={onSubmit}>
@@ -44,14 +49,16 @@ const UserForm = ({ handlerAddUsers }) => {
         value={username}
         onChange={onInputChange}
       />
-      <input
+      {/* si el id mayor que 0 */}
+      { id > 0 ? '' : <input
         className="form-control my-3 w-75"
         placeholder="Password"
         type="password"
         name="password"
         value={password}
         onChange={onInputChange}
-      />
+      /> }
+      
       <input
         className="form-control my-3 w-75"
         placeholder="Email"
@@ -59,12 +66,17 @@ const UserForm = ({ handlerAddUsers }) => {
         value={email}
         onChange={onInputChange}
       />
+      <input
+         name="id"
+         value={id}
+         type="hidden"
+      />
       <button
         className="btn btn-primary"
         type="submit"
-        onChange={onInputChange}
+
       >
-        Crear
+        { id > 0 ? 'Editar' : 'Crear'}
       </button>
     </form>
   );
