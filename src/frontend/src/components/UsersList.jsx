@@ -1,3 +1,5 @@
+// listado de usuarios
+
 import React, { useReducer } from "react";
 import PageHero from "./PageHero";
 

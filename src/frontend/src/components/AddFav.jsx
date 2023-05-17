@@ -1,3 +1,5 @@
+// icono de añadir a favoritos
+
 const AddFav = () => {
   return (
     <div>

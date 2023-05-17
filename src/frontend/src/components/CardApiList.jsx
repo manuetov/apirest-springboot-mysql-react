@@ -1,3 +1,6 @@
+// 1. conecta con la api giphy. 2 endponints listado y search
+// 2. formulario para añadir gif con persistencia en BD
+
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";

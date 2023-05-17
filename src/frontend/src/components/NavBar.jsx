@@ -1,21 +1,36 @@
 import styled from "styled-components";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { links } from "../utils/constants";
 import { FaBars } from "react-icons/fa";
-import Logo from './logo'
+import Logo from "./logo";
+import { useState, useEffect } from "react";
 
 import { useSidebarContext } from "../context/sidebar_context";
+import { useAuthContext } from "../context/AuthContext";
 
 const NavBar = () => {
+  const { logout, authUser } = useAuthContext();
+  console.log(authUser);
   const { openSidebar } = useSidebarContext();
+
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    // llama a la función pasada en el context
+    logout("false");
+
+    navigate("/", {
+      replace: false,
+    });
+  };
 
   return (
     <NavContainer>
       <div className="nav-center">
         <div className="nav-header">
-      <Link to='/'>
-            <Logo/> 
+          <Link to="/">
+            <Logo />
           </Link>
           <button type="button" className="nav-toggle" onClick={openSidebar}>
             <FaBars />
@@ -25,6 +40,14 @@ const NavBar = () => {
         <ul className="nav-links">
           {links.map((link) => {
             const { id, text, url } = link;
+            // Si el link es de inicio de sesión y el usuario está autenticado, no lo mostramos
+            if (text === "login" && authUser) {
+              return null;
+            }
+            // Si el enlace es "users" y el usuario no está autenticado, no lo mostramos
+            if (text === "users" && !authUser) {
+              return null;
+            }
             return (
               <li key={id}>
                 <Link to={url}> {text} </Link>
@@ -32,7 +55,11 @@ const NavBar = () => {
             );
           })}
         </ul>
+        {authUser && (
+          <span className="nav-item nav-link">{authUser?.name}</span>
+        )}
 
+        {authUser && <button onClick={onLogout}>Logout</button>}
       </div>
     </NavContainer>
   );
@@ -43,7 +70,7 @@ const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
