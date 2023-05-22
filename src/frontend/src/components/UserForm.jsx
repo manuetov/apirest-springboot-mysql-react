@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { useUserContext } from "../context/UserContext";
 
 
 
-const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser, handlerCloseForm }) => {
+const UserForm = () => {
 
+  const { userSelected, handlerAddUsers, initialUserForm, handlerCloseForm } = useUserContext()
+  
   const [userForm, setUserForm] = useState(initialUserForm);
 
   const { id, username, email, password } = userForm;
@@ -42,10 +45,15 @@ const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser, handlerClose
   // cuando se hace click en update
   useEffect(()=> {
       setUserForm({
-         ...selectedUser,
+         ...userSelected,
          password: ''
       })
-  }, [selectedUser])
+  }, [userSelected])
+
+  const onCloseForm = () => {
+    handlerCloseForm();
+    setUserForm(initialUserForm);
+}
 
   return (
     <form onSubmit={onSubmit}>
@@ -89,7 +97,7 @@ const UserForm = ({ handlerAddUsers, initialUserForm, selectedUser, handlerClose
       <button 
         className="btn btn-primary mx-5"
         type="button"
-        onClick={handlerCloseForm}
+        onClick={onCloseForm}
       >
         Cerrar
       </button>

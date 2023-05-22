@@ -1,13 +1,12 @@
 // listado de usuarios
-
+import { useUserContext } from "../context/UserContext";
 import React, { useReducer } from "react";
 import PageHero from "./PageHero";
 
-const UsersList = ({
-  users = [],
-  handlerRemoveUsers,
-  handlerUserSelectedForm,
-}) => {
+const UsersList = () => {
+
+const { users = [], handlerRemoveUsers, handlerUserSelectedForm } = useUserContext()
+
   console.log(users);
 
   return (

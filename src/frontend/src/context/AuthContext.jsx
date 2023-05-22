@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import { useContext, useReducer} from 'react'
 import { authReducer } from '../auth/authReducer'
 
 import { types } from '../auth/types/types'
 
 // creo el context
-const AuthContext = React.createContext()
+const AuthContext = createContext()
 
 
 // se cambiará a local storage

@@ -27,6 +27,9 @@ export const user_reducer = (state = [], action) => {
         return user;
       });
 
+    case "loadingUser":
+      return action.payload
+      
     default:
       return state;
   }

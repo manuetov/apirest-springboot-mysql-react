@@ -1,24 +1,26 @@
 // ruta users. muestra listado y form para crear users
 
+import { useEffect } from "react";
 import { UsersList, UserForm, PageHero } from "../components";
-import { useUsers } from "../hooks/useUsers";
+
+import { useUserContext } from "../context/UserContext";
 
 const UsersPage = () => {
   const {
     // atributos o propiedades
-    users,
-    userSelected,
-    initialUserForm,
+    users,   
     visibleForm,
     // funciones
-    handlerAddUsers,
+    handlerOpenForm,
     handlerRemoveUsers,
     handlerUserSelectedForm,
-    handlerOpenForm,
-    handlerCloseForm
-
+    getUsers
     // hooks personalizado
-  } = useUsers();
+  } = useUserContext();
+
+  useEffect(() => {
+    getUsers()
+  },[])
 
   return (
     <div className="d-flex flex-wrap">
@@ -27,12 +29,7 @@ const UsersPage = () => {
         <div className="row">
           {!visibleForm || (
             <div className="col-md-4">
-              <UserForm
-                initialUserForm={initialUserForm}
-                handlerAddUsers={handlerAddUsers}
-                selectedUser={userSelected}
-                handlerCloseForm={handlerCloseForm}
-              />
+              <UserForm />
             </div>
           )}
 
@@ -45,7 +42,7 @@ const UsersPage = () => {
                 Nuevo usuario
               </button>
             )}
-
+            {/* se cargan los usuarios en la tabla */}
             {users.length === 0 ? (
               <div className="alert alert-warning">
                 {" "}

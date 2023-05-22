@@ -1,22 +1,24 @@
 // hooks personalizado para users
 
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { user_reducer } from "../reducers/user_reducer";
 import Swal from "sweetalert2";
+import { findAll } from "../services/userService";
+
 
 const initialUsers = [
-  {
-    id: 1,
-    username: "Pepin",
-    email: "pepin@gmail.com",
-    password: "12345",
-  },
-  {
-    id: 2,
-    username: "Manolin",
-    email: "manolin@gmail.com",
-    password: "12345",
-  },
+  // {
+  //   id: 1,
+  //   username: "Pepin",
+  //   email: "pepin@gmail.com",
+  //   password: "12345",
+  // },
+  // {
+  //   id: 2,
+  //   username: "Manolin",
+  //   email: "manolin@gmail.com",
+  //   password: "12345",
+  // },
 ];
 
 const initialUserForm = {
@@ -32,6 +34,20 @@ export const useUsers = (user) => {
   const [userSelected, setuserSelected] = useState(initialUserForm);
   // formulario visible/no visible
   const [visibleForm, setvisibleForm] = useState(false)
+
+  // conecta con la api backend
+  const getUsers = async() => {
+    const result = await findAll()
+    console.log(result)
+    dispatch({
+      type:'loadingUser',
+      payload: result.data
+    })
+  }
+
+  useEffect(()=> {
+    getUsers()
+  },[])
 
   // añade/actualiza usuario desde userform
   const handlerAddUsers = (user) => {
@@ -108,7 +124,7 @@ export const useUsers = (user) => {
     handlerRemoveUsers,
     handlerUserSelectedForm,
     handlerOpenForm,
-    handlerCloseForm
-
+    handlerCloseForm,
+    getUsers
   };
 };

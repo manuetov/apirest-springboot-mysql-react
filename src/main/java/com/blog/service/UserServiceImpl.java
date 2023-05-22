@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
+    // findAll() es de tipo iterable casteo a tipo list
     public List<User> findAll() {
         return (List<User>) userRepository.findAll();
     }
@@ -37,12 +38,13 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public Optional<User> update(User user, Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<User> userOptional = userRepository.findById(id); //this.findById(id)
+
         if(userOptional.isPresent()) {
             User userDB = userOptional.orElseThrow();
             userDB.setUsername(user.getUsername());
             userDB.setEmail(user.getEmail());
-            return Optional.of(userRepository.save(userDB));
+            return Optional.of(userRepository.save(userDB)); // this.save(userDB)
         }
         return Optional.empty();
     }

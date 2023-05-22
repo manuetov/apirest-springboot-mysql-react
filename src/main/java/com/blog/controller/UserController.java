@@ -25,17 +25,18 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> oneUser(@PathVariable(name= "userId") Long id){
         Optional<User> userOptional = userService.findById(id);
-
+        // si esta presente se devuelve el objeto en formato Json en el body de la response status 200
         if(userOptional.isPresent()) {
             return ResponseEntity.ok(userOptional.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); //status 404
     }
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user){
 
-        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED); //status 201
+        //return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user))
     }
 
     @PutMapping("/{userId}")
