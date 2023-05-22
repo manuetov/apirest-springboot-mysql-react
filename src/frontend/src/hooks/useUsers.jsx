@@ -3,7 +3,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { user_reducer } from "../reducers/user_reducer";
 import Swal from "sweetalert2";
-import { findAll } from "../services/userService";
+import { findAll, remove, save, update } from "../services/userService";
 
 
 const initialUsers = [
@@ -28,29 +28,26 @@ const initialUserForm = {
   email: "",
 };
 
-export const useUsers = (user) => {
+export const useUsers = () => {
   const [users, dispatch] = useReducer(user_reducer, initialUsers);
   // guarda los datos del usuario para actulizarlos
   const [userSelected, setuserSelected] = useState(initialUserForm);
   // formulario visible/no visible
   const [visibleForm, setvisibleForm] = useState(false)
 
-  // conecta con la api backend
+  // recibe todos los users desde la api del backend
   const getUsers = async() => {
     const result = await findAll()
     console.log(result)
+    // actualiza el estado con los datos recibidos
     dispatch({
       type:'loadingUser',
       payload: result.data
     })
   }
 
-  useEffect(()=> {
-    getUsers()
-  },[])
-
-  // añade/actualiza usuario desde userform
-  const handlerAddUsers = (user) => {
+  // añade o actualiza usuario desde userform en el backend
+  const handlerAddUsers = async (user) => {
    //  let type;
    //  if (user.id === 0) {
    //    type = "addUser";
@@ -58,9 +55,16 @@ export const useUsers = (user) => {
    //    type = "updateUser";
    //  }
 
+   let response
+    if (user.id === 0) {
+      response = await save(user)
+    } else {
+      response = await update(user)
+    }
+
     dispatch({
       type: (user.id === 0) ? "addUser" : "updateUser",
-      payload: user,
+      payload: response.data,
     });
 
     Swal.fire(
@@ -86,6 +90,8 @@ export const useUsers = (user) => {
       confirmButtonText: "Si, borrarlo!",
     }).then((result) => {
       if (result.isConfirmed) {
+        // del service para borrar
+        remove(id)
         dispatch({
           type: "removeUser",
           payload: id,
