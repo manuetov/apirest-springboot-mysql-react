@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
         userSelected,
         initialUserForm,
         visibleForm,
+        errors,
         // funciones
         handlerAddUsers,
         handlerRemoveUsers,
@@ -27,6 +28,7 @@ export const UserProvider = ({ children }) => {
                 userSelected,
                 initialUserForm,
                 visibleForm,
+                errors,
                 handlerAddUsers,
                 handlerRemoveUsers,
                 handlerUserSelectedForm,

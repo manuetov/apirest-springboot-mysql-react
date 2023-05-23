@@ -8,8 +8,8 @@ import { useUserContext } from "../context/UserContext";
 
 const UserForm = () => {
 
-  const { userSelected, handlerAddUsers, initialUserForm, handlerCloseForm } = useUserContext()
-  
+  const { userSelected, handlerAddUsers, initialUserForm, handlerCloseForm, errors } = useUserContext()
+
   const [userForm, setUserForm] = useState(initialUserForm);
 
   const { id, username, email, password } = userForm;
@@ -26,34 +26,46 @@ const UserForm = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    // en editar no se incluye el campo password 
-    if (!username || !email || ( !password && id === 0 )) {
-      Swal.fire({
-        icon: 'error de validación',
-        title: 'Oops...',
-        text: 'ha dejado un campo vacío en el formulario!',
-        footer: '<a href="">Debe rellenar todos los campos</a>'
-      })
-      return;
-    }
-    console.log(userForm);
 
+    // validación formulario frontend
+    // if (!username || (!password && id === 0) || !email) {
+    //   Swal.fire(
+    //     'Error de validacion',
+    //     'Debe completar los campos del formulario!',
+    //     'error'
+    //   );
+
+    //   return;
+    // }
+    // if (!email.includes('@')) {
+    //   Swal.fire(
+    //     'Error de validacion email',
+    //     'El email debe ser valido, incluir un @!',
+    //     'error'
+    //   );
+    //   return;
+    // }
+    // console.log(userForm);
+
+    // guardar el user form en el listado de usuarios
     handlerAddUsers(userForm);
     setUserForm(initialUserForm);
   };
 
+
   // cuando se hace click en update
-  useEffect(()=> {
-      setUserForm({
-         ...userSelected,
-         password: ''
-      })
+  useEffect(() => {
+    setUserForm({
+      ...userSelected,
+      password: ''
+    })
   }, [userSelected])
+
 
   const onCloseForm = () => {
     handlerCloseForm();
     setUserForm(initialUserForm);
-}
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -65,16 +77,18 @@ const UserForm = () => {
         value={username}
         onChange={onInputChange}
       />
+      <p className="text-dager">{errors?.username}</p>
       {/* si el id mayor que 0 */}
-      { id > 0 ? '' : <input
+      {id > 0 ? '' : <input
         className="form-control my-3 w-75"
         placeholder="Password"
         type="password"
         name="password"
         value={password}
         onChange={onInputChange}
-      /> }
-      
+      />}
+      <p className="text-dager">{errors?.password}</p>
+
       <input
         className="form-control my-3 w-75"
         placeholder="Email"
@@ -82,19 +96,21 @@ const UserForm = () => {
         value={email}
         onChange={onInputChange}
       />
+      <p className="text-dager">{errors?.email}</p>
+
       <input
-         name="id"
-         value={id}
-         type="hidden"
+        name="id"
+        value={id}
+        type="hidden"
       />
       <button
         className="btn btn-primary"
         type="submit"
 
       >
-        { id > 0 ? 'Actualizar' : 'Crear'}
+        {id > 0 ? 'Actualizar' : 'Crear'}
       </button>
-      <button 
+      <button
         className="btn btn-primary mx-5"
         type="button"
         onClick={onCloseForm}

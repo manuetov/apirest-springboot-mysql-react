@@ -7,7 +7,7 @@ export const findAll = async () => {
       const response = await axios.get(BASE_URL)
       return response
    } catch (error) {
-      console.log(error)
+      console.error(error)
    }
    return null
 }
@@ -25,6 +25,7 @@ export const save = async ({ username, email, password }) => {
       throw error
    }
 
+
 }
 
 // objeto user destructurado
@@ -33,19 +34,21 @@ export const update = async ({ id, username, email }) => {
    try {
       return await axios.put(`${BASE_URL}/${id}`, {
          username,
-         email
+         email,
+         password: 'algo'
       })
-
+      // en el backend en service el password no se asigna nada cuando se actualiza,
+      // por eso y para que no de error en la validación del formulario si pone 'algo'
    } catch (error) {
       throw error
    }
-
+ 
 }
 
-export const remove = async ({ id }) => {
+export const remove = async (id) => {
    try {
       await axios.delete(`${BASE_URL}/${id}`)
    } catch (error) {
-      console.log(error)
+      console.error(error)
    }
 }
