@@ -22,6 +22,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.blog.auth.TokenJwtConfig.*;
+
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
@@ -83,11 +85,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((org.springframework.security.core.userdetails.User)authResult.getPrincipal()).getUsername();
 
         // creo un token artesanal. Base64 es inseguro
-        String originalInput= "supersecreta." + username;
+        String originalInput = SECRET_KEY + "." + username;
         String token = Base64.getEncoder().encodeToString(originalInput.getBytes());
 
         //agrego encabezado de autorización a la respuesta HTTP
-        response.addHeader("Authorization", "Bearer" + token);
+        response.addHeader(HEADER_AUTHORIZATION , PREFIX_TOKEN + token);
         // para almacenar los datos que se enviarán en el cuerpo
         Map<String, Object> body = new HashMap<>();
         body.put("token", token);

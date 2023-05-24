@@ -15,7 +15,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // usuario ficticio
+        // usuario ficticio hardcodeado
         if(!username.equals("admin")) {
             throw new UsernameNotFoundException(String.format("Username %s no existe!!", username));
         }
@@ -24,8 +24,9 @@ public class JpaUserDetailsService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         // interface userDetails => username, password, roles etc.
+        // encriptado con Bcrypt
         return new User(username,
-                "12345",
+                "$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS",
                 true,
                 true,
                 true,

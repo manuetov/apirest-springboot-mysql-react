@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   const onLogin = () => {
 
-    login('manolo')
+    login('admin', '12345')
 
     navigate('/', {
       replace: true
