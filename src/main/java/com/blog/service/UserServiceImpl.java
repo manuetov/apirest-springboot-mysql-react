@@ -1,12 +1,16 @@
 package com.blog.service;
 
+import com.blog.entity.Role;
 import com.blog.entity.User;
+import com.blog.repository.RoleRepository;
 import com.blog.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,12 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // para inyectar la palabra clave del usuario sin encriptar
 
     @Override
     @Transactional(readOnly = true)
@@ -32,6 +42,23 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public User save(User user) {
+        // encripto la clave
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // busco el role en el repo
+        Optional<Role> optRoles = roleRepository.findByName("ROLE_USER");
+        // creo una lista de roles
+        List<Role> roles = new ArrayList<>();
+        // si el role está presente lo añado a la lista
+        if(optRoles.isPresent()){
+            roles.add(optRoles.orElseThrow());
+        }
+        // asigno el role al usuario
+        user.setRoles(roles);
+
+
+
+
+        // lo guardo encriptado
         return userRepository.save(user);
     }
 
