@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,9 +22,10 @@ public class JpaUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<com.blog.entity.User> userOtional = userRepository.findByUsername(username);
+        Optional<com.blog.entity.User> userOtional = userRepository.getUserByUsername(username);
 
         // si el usuario no existe en la BBDD lanzo error
         if(!userOtional.isPresent()) {
@@ -34,9 +35,12 @@ public class JpaUserDetailsService implements UserDetailsService {
         com.blog.entity.User user = userOtional.orElseThrow();
 
         // SimpleGrantedAuthority es una implementación de la interfaz GrantedAuthority
-        List<GrantedAuthority> authorities = userOtional
+        /* asignar roles a un usuario en el contexto de seguridad de Spring. En este caso, se está obteniendo una lista
+        * de roles del usuario y se está creando una lista de objetos GrantedAuthority a partir de ellos.
+        * la entidad Role tiene un método getName() que devuelve el nombre del rol. */
+        List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
-                .map(r -> new SimpleGrantedAuthority(r.getUsername()))
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .collect(Collectors.toList());
 
         // interface userDetails => username, password, roles etc.

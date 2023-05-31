@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String password = null;
 
         try{
-            user = new ObjectMapper().readValue(request.getInputStream(),User.class);
+            user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
             // asigno los datos mapeados
             username = user.getUsername();
@@ -79,17 +79,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         * UserDetails en el contexto de seguridad de Spring.
         * authResult es el objeto que representa el resultado exitoso de la autenticación. El método getPrincipal()
         * devuelve el objeto de usuario que representa al usuario asociado con la autenticación y su role */
-        String username = ((org.springframework.security.core.userdetails.User)authResult.getPrincipal()).getUsername();
+        String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal())
+                .getUsername();
+
         // Collection<? extends GrantedAuthority> es el tipo de dato que se utiliza para declarar la variable roles.
         // Es una colección de objetos que implementan la interfaz GrantedAuthority
         Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();
 
-        // creo un token artesanal. Base64 es inseguro
-/*      String originalInput = SECRET_KEY + "." + username;
-        String token = Base64.getEncoder().encodeToString(originalInput.getBytes());*/
-
         // stream que devuelve true si el role es Admin
         boolean isAdmin = roles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+        System.out.println(isAdmin);
 
         // Claims => objeto que se usa para enviar data(roles) en el token. Object se convierte a Json
         Claims claims = Jwts.claims();
@@ -98,7 +97,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.put("username", username);
 
         // creo el objeto token con el patrón builder
-        String token = Jwts.builder()  // crea un generador de tokens JWT.
+        String token = Jwts.builder() // crea un generador de tokens JWT.
                 .setClaims(claims) // roles
                 .setSubject(username)
                 .signWith(SECRET_KEY)
@@ -107,7 +106,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
 
         //agrego encabezado de autorización a la respuesta HTTP
-        response.addHeader(HEADER_AUTHORIZATION , PREFIX_TOKEN + token);
+        response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
         // para almacenar los datos que se enviarán en el cuerpo
         Map<String, Object> body = new HashMap<>();
         body.put("token", token);

@@ -1,15 +1,17 @@
 package com.blog.auth.filters;
 
 import com.blog.auth.SimpleGrantedAuthorityJsonCreator;
-import com.blog.auth.TokenJwtConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.blog.auth.TokenJwtConfig.*;
@@ -37,7 +38,7 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
         // 1 obtener las cabeceras
         String header = request.getHeader(HEADER_AUTHORIZATION);
         // 2. si la cabecera es nula o no comienza con Bearer , => forbiden STATUS 403. En rutas públicas no se pasa token
-        if(header == null || !header.contains(PREFIX_TOKEN)) {
+        if(header == null || !header.startsWith(PREFIX_TOKEN)) {
             chain.doFilter(request, response);
             return;
         }
@@ -45,27 +46,10 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
         String token = header.replace(PREFIX_TOKEN, "");
         System.out.println(token);
 
-/*      con Base64 :
-
-        // 4. decodifico el token
-        byte[] tokenDecodeBytes = Base64.getDecoder().decode(token);
-        // 5. lo convierto a string
-        String tokenDecode = new String(tokenDecodeBytes);
-        System.out.println(tokenDecode);
-
-        *//* divide el token decodificado en dos partes utilizando el carácter punto como delimitador. El resultado es un
-        * array de dos elementos: el primer elemento es la palabra secreta y el segundo elemento es el nombre de usuario.
-        * \\. => hay que añadir doble \\ para escapar, ya que el punto es un carácter reservado en una expresión regular,
-        *  que representa cualquier carácter. Se podria haber usado => : - etc y no sería cecesario escapar con las \\*//*
-        String[] tokenArr = tokenDecode.split("\\.");
-        System.out.println(tokenArr.length);
-        // asigna el primer elemento del array a secret
-        String secret = tokenArr[0];
-        String username = tokenArr[1];*/
-
-        // La data viene en el claims, se Valida el token con JWT. y se Compara la palabra secreta con la que viene en el token
+        // La data viene en el claims, se Valida el token con JWT, se compara la palabra secreta con la que viene en el
+        // token
         try {
-            Claims claims =  Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                              .setSigningKey(SECRET_KEY)
                              .build()
                              .parseClaimsJws(token)
@@ -75,11 +59,9 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             Object rolesClaim = claims.get("authorities");
             // obtengo el username del claim
             String username = claims.getSubject();
+            Object username2 = claims.get("username");
             System.out.println(username);
-
-            // Roles harcodeados
- /*           List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));*/
+            System.out.println(username2);
 
             /* Lee un array JSON que representa roles o autoridades, utiliza el método addMixIn() para asociar una clase
              * mix-in (SimpleGrantedAuthorityJsonCreator) a la clase SimpleGrantedAuthority, y luego realiza la
@@ -101,9 +83,10 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             Map<String, String> body = new HashMap<>();
             body.put("error", e.getMessage());
             body.put("message", "El token JWT no es válido!");
+
             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
             response.setStatus(403);
-            response.setContentType("appliation/json");
+            response.setContentType("application/json");
         }
     /* En resumen, este código verifica la validez de un token JWT en función de una palabra secreta y un nombre de
     * usuario. Si el token es válido, se autentica al usuario y se permite el acceso a la ruta protegida. Si el token

@@ -5,12 +5,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -20,10 +24,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
     @Size(min = 3, max = 25)
     @Column(unique = true)
     private String username;
+
     @NotBlank
     private String password;
 
@@ -33,11 +39,13 @@ public class User {
     private String email;
 
     // Un usuario puede tener muchos roles. Un role puede estar en muchos usuarios
-    @ManyToMany // unidireccional a través del usuario obtengo su role. No es necesario obtener los usuarios de los roles
+    // en el momento que se guarde un user(parent) se guardará tambien su role(child)
+    // unidireccional a través del usuario obtengo su role. No es necesario obtener los usuarios de los roles
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",  // nombre de la tabla intermedia
-            joinColumns = @JoinColumn(name = "user_id"),  // Fk. Nombre de la llave siempre en singular
-            inverseJoinColumns = @JoinColumn(name="role_id"),  // Fk. Nombre de la llave siempre en singular
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),  // Fk. Nombre de la llave siempre en singular
+            inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"),  // Fk. Nombre de la llave siempre en singular
             uniqueConstraints = { @UniqueConstraint(columnNames = {"user_id", "role_id"})} // evita duplicidades
     )
     private List<Role> roles;

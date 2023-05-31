@@ -36,7 +36,12 @@ public class SpringSecurityConfig {
     // recibe una instancia HttpSecurity que se utiliza para configurar las reglas de seguridad.
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/api/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/user").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/user/{userId}").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
+                .requestMatchers("/api/user/**").hasRole("ADMIN") // equivalente a put y delete
+                /*.requestMatchers(HttpMethod.PUT, "/api/user/{userId}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/user/{userId}").hasRole("ADMIN")*/
                 .anyRequest().authenticated()
                         .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager())) // JWT

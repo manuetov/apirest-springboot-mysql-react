@@ -4,6 +4,7 @@ import com.blog.entity.User;
 import com.blog.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(originPatterns = "*")
 public class UserController {
 
     @Autowired

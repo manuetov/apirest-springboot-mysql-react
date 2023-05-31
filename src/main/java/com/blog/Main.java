@@ -17,7 +17,7 @@ public class Main {
 	}
 
 	// Cors
-	@Bean
+/*	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -26,10 +26,10 @@ public class Main {
 						.allowedOrigins("*")
 						.allowedMethods("*")
 						.allowedHeaders("*")
-						.allowCredentials(false).maxAge(3600);
+						.allowCredentials(true).maxAge(3600);
 			}
 		};
-	}
+	}*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);

@@ -8,4 +8,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 // JpaRepository<T, ID>
 @Repository  // no es necesario spring boot es superInteligente y sabe que esto es un Dao..jeje
 public interface PostBlogRepository extends JpaRepository<PostBlog, Long> {
+
 }

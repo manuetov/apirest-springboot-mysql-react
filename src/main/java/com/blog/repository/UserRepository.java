@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    // dos formas de hacer:
+    // dos formas de hacer la consulta:
     Optional<User> findByUsername(String username);
 
-    /* consulta personalizada
-    @Query("select user from User where user.username=?1")
-    Optional<User> getUserByUsername(String username); */
+    // consulta personalizada
+    @Query("select u from User u where u.username=?1")
+    Optional<User> getUserByUsername(String username);
 }
 
 /* La interfaz UserRepository define la interfaz de acceso a datos para la entidad User. La interfaz extiende

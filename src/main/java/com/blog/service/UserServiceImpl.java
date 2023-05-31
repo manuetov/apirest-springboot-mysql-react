@@ -55,9 +55,6 @@ public class UserServiceImpl implements UserService{
         // asigno el role al usuario
         user.setRoles(roles);
 
-
-
-
         // lo guardo encriptado
         return userRepository.save(user);
     }
