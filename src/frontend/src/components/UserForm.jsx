@@ -6,9 +6,9 @@ import { useUserContext } from "../context/UserContext";
 
 
 
-const UserForm = () => {
+const UserForm = ({ userSelected, handlerCloseForm }) => {
 
-  const { userSelected, handlerAddUsers, initialUserForm, handlerCloseForm, errors } = useUserContext()
+  const { handlerAddUsers, initialUserForm, errors } = useUserContext()
 
   const [userForm, setUserForm] = useState(initialUserForm);
 
@@ -27,25 +27,25 @@ const UserForm = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    // validación formulario frontend
-    // if (!username || (!password && id === 0) || !email) {
-    //   Swal.fire(
-    //     'Error de validacion',
-    //     'Debe completar los campos del formulario!',
-    //     'error'
-    //   );
+    //validación formulario frontend
+    if (!username || (!password && id === 0) || !email) {
+      Swal.fire(
+        'Error de validacion',
+        'Debe completar los campos del formulario!',
+        'error'
+      );
 
-    //   return;
-    // }
-    // if (!email.includes('@')) {
-    //   Swal.fire(
-    //     'Error de validacion email',
-    //     'El email debe ser valido, incluir un @!',
-    //     'error'
-    //   );
-    //   return;
-    // }
-    // console.log(userForm);
+      return;
+    }
+    if (!email.includes('@')) {
+      Swal.fire(
+        'Error de validacion email',
+        'El email debe ser valido, incluir un @!',
+        'error'
+      );
+      return;
+    }
+    console.log(userForm);
 
     // guardar el user form en el listado de usuarios
     handlerAddUsers(userForm);

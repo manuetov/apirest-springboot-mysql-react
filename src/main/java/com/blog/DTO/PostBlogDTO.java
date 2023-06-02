@@ -28,13 +28,12 @@ public class PostBlogDTO {
     // comentarios
     private Set<Comments> comments;
 
-
-
-    /* El método BeanUtils.copyProperties() es un método de utilidad del Framework Spring que
-     copia los valores de las propiedades del objeto fuente(DTO) al objeto destino(entity).
-     El tercer parámetro es una lista de propiedades que se deben ignorar durante el proceso
-     de copia. En este caso, se ignora la propiedad "imagen", lo que sugiere que se maneja de
-     forma separada o no es necesaria en la entidad PostBlog.*/
+    /* la clase BeanUtils para copiar las propiedades de un objeto PostBlogDTO a un objeto PostBlog.
+     * La función copyProperties de BeanUtils copiará todas las propiedades que tengan nombres coincidentes
+     * entre el objeto de origen(DTO) al objeto destino(entity).
+     * El tercer parámetro, es una lista de propiedades que se deben ignorar durante el proceso
+     * de copia. En este caso, se ignora la propiedad "imagen", lo que sugiere que se maneja de
+     * forma separada o no es necesaria en la entidad PostBlog.*/
     public static PostBlog toEntity(PostBlogDTO postBlogDTO){
         PostBlog postBlog = new PostBlog();
         BeanUtils.copyProperties(postBlogDTO, postBlog, "imagen");

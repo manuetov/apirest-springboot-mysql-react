@@ -13,7 +13,7 @@ export const user_reducer = (state = [], action) => {
       return state.filter((user) => user.id !== action.payload);
 
     case "updateUser":
-      return state.map((user) => {
+      return state.map(user => {
         // si lo encuentra
         if (user.id === action.payload.id) {
           // spread para no mutar el payload

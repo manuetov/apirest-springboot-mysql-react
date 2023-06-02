@@ -35,14 +35,14 @@ public class JpaUserDetailsService implements UserDetailsService {
         com.blog.entity.User user = userOtional.orElseThrow();
 
         // SimpleGrantedAuthority es una implementación de la interfaz GrantedAuthority
-        /* asignar roles a un usuario en el contexto de seguridad de Spring. En este caso, se está obteniendo una lista
-        * de roles del usuario y se está creando una lista de objetos GrantedAuthority a partir de ellos.
-        * la entidad Role tiene un método getName() que devuelve el nombre del rol. */
+        /* asignar roles a un usuario. En este caso, se está obteniendo una lista de roles del usuario y se está
+        * creando una lista de objetos GrantedAuthority a partir de ellos. La entidad Role tiene un método getName()
+        * que devuelve el nombre del rol. */
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
                 .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .collect(Collectors.toList());
-
+        System.out.println(authorities);
         // interface userDetails => username, password, roles etc.
         // encriptado con Bcrypt
         return new User(

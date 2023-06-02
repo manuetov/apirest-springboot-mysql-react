@@ -7,14 +7,14 @@ import "./main.css";
 
 import { SidebarProvider } from "./context/sidebar_context";
 import { AuthProvider } from "./context/AuthContext";
-import { UserProvider } from "./context/UserContext";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <UserProvider>
-    <SidebarProvider>
-      <App />
-    </SidebarProvider>
-    </UserProvider>
-  </AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <SidebarProvider>
+        <App />
+      </SidebarProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );

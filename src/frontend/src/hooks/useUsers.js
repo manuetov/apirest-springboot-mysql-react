@@ -1,25 +1,13 @@
 // hooks personalizado para users que le pasa los estados y métodos al userProvider/userContext
 
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import { user_reducer } from "../reducers/user_reducer";
 import Swal from "sweetalert2";
 import { findAll, remove, save, update } from "../services/userService";
+import { useNavigate } from "react-router-dom";
 
 
-const initialUsers = [
-  // {
-  //   id: 1,
-  //   username: "Pepin",
-  //   email: "pepin@gmail.com",
-  //   password: "12345",
-  // },
-  // {
-  //   id: 2,
-  //   username: "Manolin",
-  //   email: "manolin@gmail.com",
-  //   password: "12345",
-  // },
-];
+const initialUsers = [];
 
 const initialUserForm = {
   id: 0,
@@ -42,6 +30,7 @@ export const useUsers = () => {
   const [visibleForm, setvisibleForm] = useState(false)
   const [errors, setErrors] = useState(initialErrors)
 
+  const navigate = useNavigate();
 
   // recibe todos los users desde la api del backend
   const getUsers = async () => {
@@ -56,12 +45,6 @@ export const useUsers = () => {
 
   // añade o actualiza usuario desde userform en el backend
   const handlerAddUsers = async (user) => {
-    //  let type;
-    //  if (user.id === 0) {
-    //    type = "addUser";
-    //  } else {
-    //    type = "updateUser";
-    //  }
 
     let response
     try {
@@ -86,6 +69,7 @@ export const useUsers = () => {
         'success'
       );
       handlerCloseForm()
+      navigate('/users');
 
     } catch (error) {
       if(error.response && error.response.status === 400) {

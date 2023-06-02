@@ -17,15 +17,6 @@ const LoginPage = () => {
     })
   }
 
-
-
-
-
-
-
-
-
-
   
   return (
     <div className="d-flex flex-wrap">

@@ -5,7 +5,7 @@ import { UsersList, UserForm, PageHero } from "../components";
 
 import { useUserContext } from "../context/UserContext";
 
-const UsersPage = () => {
+export const UsersPage = () => {
   const {
     // atributos o propiedades
     users,   
@@ -62,4 +62,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+
