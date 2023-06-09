@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { UsersList, UserForm, PageHero } from "../components";
 
 import { useUserContext } from "../context/UserContext";
+import { useAuthContext } from "../context/AuthContext";
 
 export const UsersPage = () => {
   const {

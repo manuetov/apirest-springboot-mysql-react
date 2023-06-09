@@ -69,7 +69,7 @@ public class PostBlogController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PostBlogDTO> updateSinglePost(@Valid @RequestBody PostBlogDTO postBlogDTO,
-                                                        @PathVariable(name = "id") long id) {
+                                                        @PathVariable long id) {
         return new ResponseEntity<>(postBlogService.updatePostBlogById(postBlogDTO, id), HttpStatus.CREATED);
     }
 

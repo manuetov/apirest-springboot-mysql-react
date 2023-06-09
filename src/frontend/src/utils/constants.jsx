@@ -30,10 +30,10 @@ export const links = [
       text: "login",
       url: "/login"
    },
-   {
-      id:7,
-      text: 'register',
-      url:"/register"
-   },
+   // {
+   //    id:7,
+   //    text: 'register',
+   //    url:"/register"
+   // },
 
 ]

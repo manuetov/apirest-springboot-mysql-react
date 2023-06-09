@@ -1,4 +1,3 @@
-import { NavBar, Sidebar} from "../components";
 import { Navigate, Route,  Routes } from "react-router-dom";
 
 
@@ -8,16 +7,13 @@ import { UsersPage }from "../pages/UsersPage";
 
 export const UserRoutes = () => {
   return (
-    <>
-      <UserProvider>
-
-        <Routes>
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/users/register" element={<RegisterPage />} />
-          <Route path="/users/edit/:id" element={<RegisterPage />} />
-          <Route path="/" element={<Navigate to="/users" />} />
-        </Routes>
-      </UserProvider>
-    </>
+    <UserProvider>
+      <Routes>
+        <Route path="/" element={<UsersPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/edit/:id" element={<RegisterPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} /> {/* Redirige a la ruta padre */}
+      </Routes>
+    </UserProvider>
   );
 };

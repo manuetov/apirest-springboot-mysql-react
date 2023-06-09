@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -41,7 +40,7 @@ public class User {
     // Un usuario puede tener muchos roles. Un role puede estar en muchos usuarios
     // en el momento que se guarde un user(parent) se guardará tambien su role(child)
     // unidireccional a través del usuario obtengo su role. No es necesario obtener los usuarios de los roles
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "users_roles",  // nombre de la tabla intermedia
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),  // Fk. Nombre de la llave siempre en singular

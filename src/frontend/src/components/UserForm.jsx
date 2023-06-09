@@ -4,18 +4,25 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useUserContext } from "../context/UserContext";
 
+export default function UserForm () {
 
-
-const UserForm = ({ userSelected, handlerCloseForm }) => {
-
-  const { handlerAddUsers, initialUserForm, errors } = useUserContext()
+  const { handlerAddUsers, initialUserForm, handlerCloseForm, userSelected, errors } = useUserContext()
 
   const [userForm, setUserForm] = useState(initialUserForm);
 
   const { id, username, email, password } = userForm;
 
+  // cuando se hace click en update
+  useEffect(() => {
+    setUserForm({
+      ...userSelected,
+      password: ''
+    })
+  }, [userSelected])
+
+
   const onInputChange = ({ target }) => {
-    console.log(target.value);
+    //console.log(target.value);
 
     const { name, value } = target;
     setUserForm({
@@ -28,39 +35,29 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
     event.preventDefault();
 
     //validación formulario frontend
-    if (!username || (!password && id === 0) || !email) {
-      Swal.fire(
-        'Error de validacion',
-        'Debe completar los campos del formulario!',
-        'error'
-      );
+    // if (!username || (!password && id === 0) || !email) {
+    //   Swal.fire(
+    //     'Error de validacion',
+    //     'Debe completar los campos del formulario!',
+    //     'error'
+    //   );
 
-      return;
-    }
-    if (!email.includes('@')) {
-      Swal.fire(
-        'Error de validacion email',
-        'El email debe ser valido, incluir un @!',
-        'error'
-      );
-      return;
-    }
-    console.log(userForm);
+    //   return;
+    // }
+    // if (!email.includes('@')) {
+    //   Swal.fire(
+    //     'Error de validacion email',
+    //     'El email debe ser valido, incluir un @!',
+    //     'error'
+    //   );
+    //   return;
+    // }
+    // console.log(userForm);
 
     // guardar el user form en el listado de usuarios
     handlerAddUsers(userForm);
-    setUserForm(initialUserForm);
+    //setUserForm(initialUserForm);
   };
-
-
-  // cuando se hace click en update
-  useEffect(() => {
-    setUserForm({
-      ...userSelected,
-      password: ''
-    })
-  }, [userSelected])
-
 
   const onCloseForm = () => {
     handlerCloseForm();
@@ -69,7 +66,7 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <h4>Crear nuevo usuario</h4>
+      {id > 0 ? <h4>Actualizar usuario</h4> : <h4>Crear nuevo usuario</h4>}
       <input
         className="form-control my-3 w-75"
         placeholder="Username"
@@ -77,7 +74,7 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
         value={username}
         onChange={onInputChange}
       />
-      <p className="text-dager">{errors?.username}</p>
+      <p className="text-danger">{errors?.username}</p>
       {/* si el id mayor que 0 */}
       {id > 0 ? '' : <input
         className="form-control my-3 w-75"
@@ -87,7 +84,7 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
         value={password}
         onChange={onInputChange}
       />}
-      <p className="text-dager">{errors?.password}</p>
+      <p className="text-danger">{errors?.password}</p>
 
       <input
         className="form-control my-3 w-75"
@@ -96,20 +93,21 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
         value={email}
         onChange={onInputChange}
       />
-      <p className="text-dager">{errors?.email}</p>
+      <p className="text-danger">{errors?.email}</p>
 
       <input
         name="id"
         value={id}
         type="hidden"
       />
+      
       <button
         className="btn btn-primary"
         type="submit"
-
       >
         {id > 0 ? 'Actualizar' : 'Crear'}
       </button>
+
       <button
         className="btn btn-primary mx-5"
         type="button"
@@ -121,4 +119,4 @@ const UserForm = ({ userSelected, handlerCloseForm }) => {
   );
 };
 
-export default UserForm;
+

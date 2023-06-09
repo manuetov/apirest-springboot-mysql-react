@@ -5,7 +5,7 @@ import { user_reducer } from "../reducers/user_reducer";
 import Swal from "sweetalert2";
 import { findAll, remove, save, update } from "../services/userService";
 import { useNavigate } from "react-router-dom";
-
+import { useAuthContext } from "../context/AuthContext";
 
 const initialUsers = [];
 
@@ -14,6 +14,7 @@ const initialUserForm = {
   username: "",
   password: "",
   email: "",
+  admin: false
 };
 
 const initialErrors = {
@@ -27,64 +28,71 @@ export const useUsers = () => {
   // guarda los datos del usuario para actulizarlos
   const [userSelected, setuserSelected] = useState(initialUserForm);
   // formulario visible/no visible
-  const [visibleForm, setvisibleForm] = useState(false)
-  const [errors, setErrors] = useState(initialErrors)
+  const [visibleForm, setvisibleForm] = useState(false);
+
+  const [errors, setErrors] = useState(initialErrors);
 
   const navigate = useNavigate();
 
+  const { login, handlerLogout } = useAuthContext()
+
   // recibe todos los users desde la api del backend
   const getUsers = async () => {
-    const result = await findAll()
-    console.log(result)
+    const result = await findAll();
+    console.log(result);
     // actualiza el estado con los datos recibidos
     dispatch({
-      type: 'loadingUser',
-      payload: result.data
-    })
-  }
+      type: "loadingUser",
+      payload: result.data,
+    });
+  };
 
-  // añade o actualiza usuario desde userform en el backend
+  // añade o actualiza usuario desde userform 
   const handlerAddUsers = async (user) => {
+    console.log(user)
+    if(!login.isAdmin) return;
 
-    let response
+    let response;
     try {
       if (user.id === 0) {
-        response = await save(user)
+        response = await save(user);
       } else {
-        response = await update(user)
+        response = await update(user);
       }
 
       dispatch({
-        type: (user.id === 0) ? "addUser" : "updateUser",
+        type: user.id === 0 ? "addUser" : "updateUser",
         payload: response.data,
       });
 
       Swal.fire(
-        user.id === 0
-          ? "Usuario Creado!!"
+        (user.id === 0) 
+          ? "Usuario Creado!!" 
           : "Usuario actualizado",
-        user.id === 0
+        (user.id === 0)
           ? "Usuario se ha creado correctamente!!"
           : "Usuario ha sido actualizado correctamente!!",
-        'success'
+        "success"
       );
-      handlerCloseForm()
-      navigate('/users');
-
+      handlerCloseForm();
+      navigate("/users");
+      //  Si ocurre un error, se manejan diferentes casos de error y
+      //  se muestra un mensaje correspondiente.
     } catch (error) {
-      if(error.response && error.response.status === 400) {
-        console.log(error.response.data)
-        setErrors(error.response.data)
-      } else if (error.response && error.response.status === 500 && 
-        error.response.data?.message?.includes('constraint')) { 
+      if (error.response && error.response.status === 400) {
+        console.log(error.response.data);
+        setErrors(error.response.data);
+      } else if (error.response && error.response.status === 500 &&
+        error.response.data?.message?.includes("constraint")) {
 
-          if(error.response.data?.message?.includes('UK_username')) {
-            setErrors({username: 'El username ya existe'})
-          }
-          if(error.response.data?.message?.includes('UK_email')) {
-            setErrors({username: 'El username ya existe'})
-          }
-          
+        if (error.response.data?.message?.includes("UK_username")) {
+          setErrors({ ...errors, username: "El username ya existe" });
+        }
+        if (error.response.data?.message?.includes("UK_email")) {
+          setErrors({ ...errors, username: "El username ya existe" });
+        }
+      } else if (error.response?.status == 401) {
+        handlerLogout();
       } else {
         throw error;
       }
@@ -94,6 +102,8 @@ export const useUsers = () => {
   const handlerRemoveUsers = (id) => {
     console.log(id);
 
+    if (!login.isAdmin) return;
+
     Swal.fire({
       title: "Está seguro?",
       text: "El usuario será eliminado!",
@@ -102,38 +112,49 @@ export const useUsers = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Si, borrarlo!",
-    }).then((result) => {
+    }).then( async (result) => {
       if (result.isConfirmed) {
         // del service para borrar
-        remove(id)
-        dispatch({
-          type: "removeUser",
-          payload: id,
-        });
-        Swal.fire("Uusario Eliminado!", "El usuario ha sido borrado correctamente.", "success");
+        try {
+          await remove(id);
+          dispatch({
+              type: 'removeUser',
+              payload: id,
+          });
+          Swal.fire(
+              'Usuario Eliminado!',
+              'El usuario ha sido eliminado con exito!',
+              'success'
+          );
+      } catch (error) {
+          if (error.response?.status == 401) {
+              handlerLogout();
+          }
+      }
       }
     });
   };
 
   // datos del usuario seleccionado para update
   const handlerUserSelectedForm = (user) => {
-    console.log(user);
-    setvisibleForm(true)
+    //console.log(user);
+    setvisibleForm(true);
     setuserSelected({ ...user });
   };
 
   // handlers visible/no form
   const handlerOpenForm = () => {
-    setvisibleForm(true)
-  }
+    setvisibleForm(true);
+  };
 
+  // cierra el formulario de nuevo/actualizar usuario
   const handlerCloseForm = () => {
-    setvisibleForm(false)
+    setvisibleForm(false);
     // limpia el formulario
-    setuserSelected(initialUserForm)
+    setuserSelected(initialUserForm);
     // limpia los mensajes de errors del formulario
-    setErrors({})
-  }
+    setErrors({});
+  };
 
   return {
     // atributos o propiedades
@@ -148,6 +169,6 @@ export const useUsers = () => {
     handlerUserSelectedForm,
     handlerOpenForm,
     handlerCloseForm,
-    getUsers
+    getUsers,
   };
 };

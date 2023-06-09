@@ -16,23 +16,25 @@ export const App = () => {
       <NavBar />
       <Sidebar />
       <Routes>
+        {/* Rutas públicas */}
+        <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/register" element={<RegisterPage />} /> */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/buscar" element={<CardApiList />} />
+
+        {/* Rutas privadas */}
         {login.isAuth ? (
           <>
-            <Route path="/*" element={<UserRoutes />} />
-            <Route path="/home" element={<HomePage />} />
             <Route path="/favorites" element={<CardFavList />} />
-            <Route path="/buscar" element={<CardApiList />} />
             <Route path="/addmeme" element={<FormAdd />} />
+            {login.isAdmin && (
+              <Route path="/users/*" element={<UserRoutes />} />
+            )}
           </>
         ) : (
           <>
-            <Route path="/*" element={<HomePage />} />
-            <Route path="/buscar" element={<CardApiList />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/favorites" element={<LoginPage />} />
             <Route path="/addmeme" element={<LoginPage />} />
-            {/* <Route path="*" element={<Error />} /> */}
           </>
         )}
       </Routes>

@@ -2,8 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 
 import { useUserContext } from "../context/UserContext";
-import { UserForm } from "../components";
-
+import  UserForm  from '../components/UserForm'
 
 export const RegisterPage = () => {
 
@@ -16,7 +15,7 @@ export const RegisterPage = () => {
     useEffect(() => {
         console.log(id);
         if (id) {
-            const user = users.find(u => u.id == id) || initialUserForm;
+            const user = users?.find(u => u.id == id) || initialUserForm;
             setUserSelected(user);
         }
     }, [id])
@@ -26,7 +25,7 @@ export const RegisterPage = () => {
             <h4>{ userSelected.id > 0 ? 'Editar' : 'Registrar'} Usuario</h4>
             <div className="row">
                 <div className="col">
-                    <UserForm userSelected={userSelected} />
+                    <UserForm userSelected={userSelected}/>
                 </div>
             </div>
         </div>

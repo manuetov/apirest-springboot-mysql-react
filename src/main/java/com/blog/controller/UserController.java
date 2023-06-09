@@ -61,7 +61,8 @@ public class UserController {
         }
 
         Optional<User> userOptional = userService.update(user, id);
-        if(userOptional.isPresent()){
+
+        if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
         }
 

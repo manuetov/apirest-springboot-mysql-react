@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -48,7 +49,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/user/{userId}").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
                 .requestMatchers("/api/user/**").hasRole("ADMIN") // equivalente a put y delete
-                /*.requestMatchers(HttpMethod.PUT, "/api/user/{userId}").hasRole("ADMIN")
+/*                .requestMatchers(HttpMethod.PUT, "/api/user/{userId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/user/{userId}").hasRole("ADMIN")*/
                 .anyRequest().authenticated()
                         .and()
@@ -64,7 +65,7 @@ public class SpringSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173"));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173"));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));//token y json
         corsConfig.setAllowCredentials(true);

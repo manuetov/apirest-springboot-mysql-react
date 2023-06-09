@@ -49,8 +49,8 @@ const NavBar = () => {
             if (text === "register" && login.user) {
               return null;
             }
-            // Si el enlace es "users" y el usuario no está autenticado, no lo mostramos
-            if (text === "users" && !login.user ) {
+            // Si el enlace es "users" y el usuario no es Admin, no lo mostramos
+            if (text === "users" && !login.isAdmin ) {
               return null;
             }
             return (
