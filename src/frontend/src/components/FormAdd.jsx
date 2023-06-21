@@ -7,7 +7,6 @@ import styled from "styled-components";
 import filaGifs from "../assets/fila-gifs.gif";
 import PageHero from "./PageHero";
 
-
 const FormAdd = ({novermiga}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -62,7 +61,10 @@ const FormAdd = ({novermiga}) => {
     console.log(file);
     axios
       .post("http://localhost:8080/api/post", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "Authorization": sessionStorage.getItem('token'),
+          "Content-Type": "multipart/form-data"
+         },
       })
       .then((res) => {
         console.log(res.data);

@@ -51,7 +51,7 @@ public class User {
 
 }
 
-/* relación de muchos a muchos entre las entidades de usuario (User) y roles (Role) en un modelo de base de datos.
+/* Relación de muchos a muchos entre las entidades de usuario (User) y roles (Role) en un modelo de base de datos.
 * @ManyToMany: Es una anotación de JPA que indica una relación de muchos a muchos entre entidades.
 * @JoinTable: Es una anotación utilizada para especificar los detalles de la tabla intermedia que se utilizará para
 * almacenar la relación entre las entidades de usuario y roles.

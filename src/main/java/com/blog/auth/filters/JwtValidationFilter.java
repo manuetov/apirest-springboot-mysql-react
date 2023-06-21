@@ -85,7 +85,7 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             body.put("message", "El token JWT no es válido!");
 
             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-            response.setStatus(403);
+            response.setStatus(401);
             response.setContentType("application/json");
         }
     /* En resumen, este código verifica la validez de un token JWT en función de una palabra secreta y un nombre de

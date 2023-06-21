@@ -23,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
+@CrossOrigin(originPatterns = "*")
 public class PostBlogController {
 
     @Autowired
@@ -37,13 +38,13 @@ public class PostBlogController {
         return new ResponseEntity<>(postBlogService.listAllPost(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PostBlogDTO> getSinglePost(@PathVariable(name = "id") long id){
+    @GetMapping("/{userId}")
+    public ResponseEntity<PostBlogDTO> getSinglePost(@PathVariable(name = "userId") long id){
         return ResponseEntity.ok(postBlogService.getPostBlogById(id));
     }
 
     @PostMapping (consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+                  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePost(@ModelAttribute PostBlogDTO postBlogDTO ) {
         PostBlog postBlog = PostBlogDTO.toEntity(postBlogDTO);
         String image = storageService.store(postBlogDTO.getImagen());
@@ -67,14 +68,14 @@ public class PostBlogController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     public ResponseEntity<PostBlogDTO> updateSinglePost(@Valid @RequestBody PostBlogDTO postBlogDTO,
                                                         @PathVariable long id) {
         return new ResponseEntity<>(postBlogService.updatePostBlogById(postBlogDTO, id), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteSinglePost(@PathVariable(name = "id") long id) {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<HttpStatus> deleteSinglePost(@PathVariable(name = "userId") long id) {
         postBlogService.deletePostBlogById(id);
         return new ResponseEntity("Post elmiminado con exito",HttpStatus.OK);
     }

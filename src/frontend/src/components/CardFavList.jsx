@@ -8,6 +8,16 @@ import React, { useState, useEffect } from "react";
 import PageHero from "./PageHero";
 import Footer from "./Footer";
 
+// para pasar el token en las consultas
+const config = () => {
+  return {
+     headers: {
+        "Authorization": sessionStorage.getItem('token'),
+        //"Content-Type": "application/json" // opcional, se pasa automaticamente.
+     }
+  }
+}
+
 const CardFavList = () => {
   const [memes, setMeme] = useState([]);
   const img_URL = "http://localhost:8080/api/post/image/get?imagen=";
@@ -27,6 +37,7 @@ const CardFavList = () => {
   const [toastPosition, setToastPosition] = useState({
     top: undefined,
   });
+
 
   const fetchAllMemes = async () => {
     try {
@@ -49,7 +60,7 @@ const CardFavList = () => {
 
   // borrar
   const deleteMeme = async (id) => {
-    await axios.delete(`http://localhost:8080/api/post/${id}`);
+    await axios.delete(`http://localhost:8080/api/post/${id}`, config());
     setShowToast(true);
     setToastMessage("Gif eliminado correctamente!!!");
     // Actualizamos la lista de tarjetas llamando a fetchAllMemes()
@@ -86,7 +97,7 @@ const CardFavList = () => {
   // actualizar
   const handleUpdateMeme = async (e, id, setFormVisible) => {
     e.preventDefault();
-    await axios.put(`http://localhost:8080/api/post/${id}`, {
+    await axios.put(`http://localhost:8080/api/post/${id}`, config(), {
       titulo: updatedTitle,
     });
     // seteo el estado

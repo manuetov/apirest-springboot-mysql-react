@@ -8,6 +8,8 @@ import AddFav from "./AddFav";
 import { Form, Button, Alert } from "react-bootstrap";
 import PageHero from "./PageHero";
 import Footer from "./Footer";
+import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const APIKEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -26,12 +28,15 @@ const CardApiList = () => {
     top: undefined,
   });
 
+  const { login } = useAuthContext()
+  const navigate = useNavigate();
+
   const getGifs = () => {
     axios
       .get("https://api.giphy.com/v1/gifs/trending", {
         params: {
           api_key: APIKEY,
-          limit: 100,
+          limit: 1500,
           rating: "g",
         },
       })
@@ -83,6 +88,7 @@ const CardApiList = () => {
 
   // añadir a favoritos 
   const handleFavorite = async (gif) => {
+    if(login.isAuth){
     const { data } = await axios.get(gif.images.fixed_height.url, {
       responseType: "blob",
     });
@@ -94,7 +100,10 @@ const CardApiList = () => {
     // Envio formData al servidor
     axios
       .post("http://localhost:8080/api/post", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "Authorization": sessionStorage.getItem('token'),
+          "Content-Type": "multipart/form-data" 
+        },
       })
       .then((res) => {
         //console.log(res.data);
@@ -111,7 +120,7 @@ const CardApiList = () => {
 
     setShowToast(true);
     setToastMessage("Gif añadido a fovoritos!!!");
-  };
+  }} 
 
   return (
     <div className="d-flex flex-wrap">

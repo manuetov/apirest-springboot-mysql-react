@@ -14,7 +14,7 @@ const initialUserForm = {
   username: "",
   password: "",
   email: "",
-  admin: false
+  admin: false,
 };
 
 const initialErrors = {
@@ -34,23 +34,29 @@ export const useUsers = () => {
 
   const navigate = useNavigate();
 
-  const { login, handlerLogout } = useAuthContext()
+  const { login, handlerLogout } = useAuthContext();
 
   // recibe todos los users desde la api del backend
   const getUsers = async () => {
-    const result = await findAll();
-    console.log(result);
-    // actualiza el estado con los datos recibidos
-    dispatch({
-      type: "loadingUser",
-      payload: result.data,
-    });
+    try {
+      const result = await findAll();
+      console.log(result);
+      // actualiza el estado con los datos recibidos
+      dispatch({
+        type: "loadingUser",
+        payload: result.data,
+      });
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
   };
 
-  // añade o actualiza usuario desde userform 
+  // añade o actualiza usuario desde userform
   const handlerAddUsers = async (user) => {
-    console.log(user)
-    if(!login.isAdmin) return;
+    console.log(user);
+    if (!login.isAdmin) return;
 
     let response;
     try {
@@ -66,10 +72,8 @@ export const useUsers = () => {
       });
 
       Swal.fire(
-        (user.id === 0) 
-          ? "Usuario Creado!!" 
-          : "Usuario actualizado",
-        (user.id === 0)
+        user.id === 0 ? "Usuario Creado!!" : "Usuario actualizado",
+        user.id === 0
           ? "Usuario se ha creado correctamente!!"
           : "Usuario ha sido actualizado correctamente!!",
         "success"
@@ -82,9 +86,11 @@ export const useUsers = () => {
       if (error.response && error.response.status === 400) {
         console.log(error.response.data);
         setErrors(error.response.data);
-      } else if (error.response && error.response.status === 500 &&
-        error.response.data?.message?.includes("constraint")) {
-
+      } else if (
+        error.response &&
+        error.response.status === 500 &&
+        error.response.data?.message?.includes("constraint")
+      ) {
         if (error.response.data?.message?.includes("UK_username")) {
           setErrors({ ...errors, username: "El username ya existe" });
         }
@@ -111,26 +117,26 @@ export const useUsers = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Si, borrarlo!",
-    }).then( async (result) => {
+      confirmButtonText: "Si, eliminar!",
+    }).then(async (result) => {
       if (result.isConfirmed) {
         // del service para borrar
         try {
           await remove(id);
           dispatch({
-              type: 'removeUser',
-              payload: id,
+            type: "removeUser",
+            payload: id,
           });
           Swal.fire(
-              'Usuario Eliminado!',
-              'El usuario ha sido eliminado con exito!',
-              'success'
+            "Usuario Eliminado!",
+            "El usuario ha sido eliminado con exito!",
+            "success"
           );
-      } catch (error) {
+        } catch (error) {
           if (error.response?.status == 401) {
-              handlerLogout();
+            handlerLogout();
           }
-      }
+        }
       }
     });
   };

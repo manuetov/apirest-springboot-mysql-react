@@ -93,3 +93,6 @@ public class UserController {
 
 }
 
+/* BindingResult es una interfaz en el framework de Spring que se utiliza para capturar y analizar los resultados de la
+ * validación de datos de una solicitud HTTP. Proporciona métodos para acceder a los errores de validación y tomar
+ * acciones en consecuencia.*/

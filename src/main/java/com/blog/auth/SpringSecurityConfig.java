@@ -45,10 +45,10 @@ public class SpringSecurityConfig {
     // recibe una instancia HttpSecurity que se utiliza para configurar las reglas de seguridad.
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/api/user").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/user/{userId}").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
-                .requestMatchers("/api/user/**").hasRole("ADMIN") // equivalente a put y delete
+                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                //.requestMatchers(HttpMethod.GET, "/api/**/{userId}").hasAnyRole("USER", "ADMIN")
+                //.requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
+                .requestMatchers("/api/**").hasRole("ADMIN") // equivalente a put y delete
 /*                .requestMatchers(HttpMethod.PUT, "/api/user/{userId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/user/{userId}").hasRole("ADMIN")*/
                 .anyRequest().authenticated()
@@ -65,7 +65,8 @@ public class SpringSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173"));
+        corsConfig.setAllowedOriginPatterns(Arrays.asList("*")); // Cualquier ruta
+        //corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173"));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));//token y json
         corsConfig.setAllowCredentials(true);
