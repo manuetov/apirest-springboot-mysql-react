@@ -3,24 +3,26 @@
 import { Form, Button, Alert } from "react-bootstrap";
 import styled from "styled-components";
 
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import PageHero from "./PageHero";
 import Footer from "./Footer";
+import authPostApi from "../../apis/authPostApi";
 
 // para pasar el token en las consultas
-const config = () => {
-  return {
-     headers: {
-        "Authorization": sessionStorage.getItem('token'),
-        //"Content-Type": "application/json" // opcional, se pasa automaticamente.
-     }
-  }
-}
+// const config = () => {
+//   return {
+//      headers: {
+//         "Authorization": sessionStorage.getItem('token'),
+//         //"Content-Type": "application/json" // opcional, se pasa automaticamente.
+//      }
+//   }
+// }
+
+// uso interceptors(authPostApi) en vez de config. apis 
 
 const CardFavList = () => {
   const [memes, setMeme] = useState([]);
-  const img_URL = "http://localhost:8080/api/post/image/get?imagen=";
+  const img_URL = import.meta.env.VITE_APP_API_BASE_URL_IMAGE
 
   const [editingMeme, setEditingMeme] = useState(null);
   const [updatedTitle, setUpdatedTitle] = useState("");
@@ -41,8 +43,8 @@ const CardFavList = () => {
 
   const fetchAllMemes = async () => {
     try {
-      const res = await axios
-        .get("http://localhost:8080/api/post")
+      const res = await authPostApi
+        .get()
         .then((res) => setMeme(res.data))
         .catch((error) => console.error(error));
       console.log(res.data);
@@ -60,7 +62,8 @@ const CardFavList = () => {
 
   // borrar
   const deleteMeme = async (id) => {
-    await axios.delete(`http://localhost:8080/api/post/${id}`, config());
+    // await axios.delete(`http://localhost:8080/api/post/${id}`, config());
+    await authPostApi.delete(`/${id}`)
     setShowToast(true);
     setToastMessage("Gif eliminado correctamente!!!");
     // Actualizamos la lista de tarjetas llamando a fetchAllMemes()
@@ -97,9 +100,9 @@ const CardFavList = () => {
   // actualizar
   const handleUpdateMeme = async (e, id, setFormVisible) => {
     e.preventDefault();
-    await axios.put(`http://localhost:8080/api/post/${id}`, {
+    await authPostApi.put(`/${id}`, {
       titulo: updatedTitle,
-    }, config());
+    });
     // seteo el estado
     setMeme((prevMemes) =>
       prevMemes.map((meme) =>

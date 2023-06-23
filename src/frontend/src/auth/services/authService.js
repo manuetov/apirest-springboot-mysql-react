@@ -5,7 +5,7 @@ export const loginUser = async ({ username, password }) => {
 
   // recibo la data desde el body del request successfulAuthentication en JwtAuthenticationFilter
   try {
-    return await axios.post('http://localhost:8080/login', { 
+    return await axios.post(`${import.meta.env.VITE_APP_BASE_URL}/login`, { 
       username, 
       password 
     })
