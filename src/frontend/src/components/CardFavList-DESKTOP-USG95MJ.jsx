@@ -38,11 +38,10 @@ const CardFavList = () => {
     top: undefined,
   });
 
-
   const fetchAllMemes = async () => {
     try {
       const res = await axios
-        .get("http://localhost:8080/api/post")
+        .get("http://localhost:8080/api/post", config())
         .then((res) => setMeme(res.data))
         .catch((error) => console.error(error));
       console.log(res.data);
@@ -97,9 +96,9 @@ const CardFavList = () => {
   // actualizar
   const handleUpdateMeme = async (e, id, setFormVisible) => {
     e.preventDefault();
-    await axios.put(`http://localhost:8080/api/post/${id}`, {
+    await axios.put(`http://localhost:8080/api/post/${id}`, config(), {
       titulo: updatedTitle,
-    }, config());
+    });
     // seteo el estado
     setMeme((prevMemes) =>
       prevMemes.map((meme) =>
@@ -149,26 +148,23 @@ const CardFavList = () => {
                 {/* {console.log(hoveredIndex)} */}
                 {hoveredIndex === index && ( // Mostrar los botones de borrar y actualizar sólo si isHovered es true
                   <>
-                    <span className="m-1">
-                      <StyledButton
-                        size="sm"
-                        variant="danger"
-                        className="m-1"
-                        onClick={() => deleteMeme(meme.id)}
-                      >
-                        borrar
-                      </StyledButton>
-                    </span>
-                    <span className="m-1">
-                      <StyledButton
-                        size="sm"
-                        variant="success"
-                        className="m-1"
-                        onClick={() => setEditingMeme(meme)}
-                      >
-                        actualizar
-                      </StyledButton>
-                    </span>
+                    <button
+                      size="sm"
+                      variant="danger"
+                      className="m-1"
+                      onClick={() => deleteMeme(meme.id)}
+                    >
+                      borrar
+                    </button>
+
+                    <button
+                      size="sm"
+                      variant="success"
+                      className="m-1"
+                      onClick={() => setEditingMeme(meme)}
+                    >
+                      actualizar
+                    </button>
                   </>
                 )}
                 {/* {console.log(meme,editingMeme,editingMeme && editingMeme.Id === meme.id )}  */}
@@ -189,17 +185,14 @@ const CardFavList = () => {
                         />
                       </Form.Group>
 
-                      {/* <button
+                      <button
                         variant="primary"
                         type="submit"
                         size="sm"
                         className="m-2"
                       >
                         <StyledButton>guardar</StyledButton>
-                      </button> */}
-                      <div className="m-2"> {/* Replace the button element with a div */}
-                        <StyledButton type="submit">guardar</StyledButton>
-                      </div>
+                      </button>
                     </Form>
                   )}
               </GifActions>
