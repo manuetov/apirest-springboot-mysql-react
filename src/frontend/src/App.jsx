@@ -1,12 +1,20 @@
-import { CardFavList, FormAdd, CardApiList, NavBar, Sidebar } from "./components";
+import {
+  CardFavList,
+  FormAdd,
+  CardApiList,
+  NavBar,
+  Sidebar,
+} from "./components";
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import HomePage from "./pages/HomePage";
+import UsersPage from "./pages/UsersPage";
 
 import { LoginPage } from "./auth/pages/LoginPage";
 import { useAuthContext } from "./context/AuthContext";
-import { UserRoutes } from "./routes/UserRoutes";
-import { RegisterPage } from "./pages/RegisterPage";
 
+
+import { UserProvider } from "./context/UserContext";
 
 export const App = () => {
   const { login } = useAuthContext();
@@ -15,29 +23,31 @@ export const App = () => {
     <>
       <NavBar />
       <Sidebar />
-      <Routes>
-        {/* Rutas públicas */}
-        <Route path="/login" element={<LoginPage />} />
-        {/* <Route path="/register" element={<RegisterPage />} /> */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/buscar" element={<CardApiList />} />
+      <UserProvider>
+        <Routes>
+          {/* Rutas públicas */}
+          <Route path="/login" element={<LoginPage />} />
+          {/* <Route path="/register" element={<RegisterPage />} /> */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/buscar" element={<CardApiList />} />
 
-        {/* Rutas privadas */}
-        {login.isAuth ? (
-          <>
-            <Route path="/favorites" element={<CardFavList />} />
-            <Route path="/addmeme" element={<FormAdd />} />
-            {login.isAdmin && (
-              <Route path="/users/*" element={<UserRoutes />} />
-            )}
-          </>
-        ) : (
-          <>
-            <Route path="/favorites" element={<LoginPage />} />
-            <Route path="/addmeme" element={<LoginPage />} />
-          </>
-        )}
-      </Routes>
+          {/* Rutas privadas */}
+          {login.isAuth ? (
+            <>
+              <Route path="/favorites" element={<CardFavList />} />
+              <Route path="/addmeme" element={<FormAdd />} />
+              {login.isAdmin && (
+                <Route path="/users/*" element={<UsersPage />} />
+              )}
+            </>
+          ) : (
+            <>
+              <Route path="/favorites" element={<LoginPage />} />
+              <Route path="/addmeme" element={<LoginPage />} />
+            </>
+          )}
+        </Routes>
+      </UserProvider>
     </>
   );
 };

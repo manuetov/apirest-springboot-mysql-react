@@ -14,6 +14,8 @@ export const LoginPage = () => {
 
   const [showModal, setShowModal] = useState(true);
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const onInputChange = ({ target }) => {
     const { name, value } = target;
     setLoginForm({
@@ -33,6 +35,7 @@ export const LoginPage = () => {
     }
 
     // se lo paso al contexto para que autenticar al usuario en useAuth
+    setIsLoading(true)
     handlerLogin({ username, password });
 
     setLoginForm(initialLoginForm);
@@ -41,6 +44,16 @@ export const LoginPage = () => {
   const closeModal = () => {
     setShowModal(false);
   };
+
+  if (isLoading) {
+    return (
+      <div className="container my-4">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

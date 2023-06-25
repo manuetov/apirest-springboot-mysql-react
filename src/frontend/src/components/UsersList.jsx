@@ -1,7 +1,6 @@
-// listado de usuarios
+// listado de usuarios registrados
 import { useUserContext } from "../context/UserContext";
 import React, { useReducer } from "react";
-import PageHero from "./PageHero";
 
 const UsersList = () => {
 

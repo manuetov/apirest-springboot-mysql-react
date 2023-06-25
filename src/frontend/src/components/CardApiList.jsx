@@ -88,7 +88,10 @@ const CardApiList = () => {
 
   // añadir a favoritos 
   const handleFavorite = async (gif) => {
+    
     if(login.isAuth){
+
+
     const { data } = await axios.get(gif.images.fixed_height.url, {
       responseType: "blob",
     });
@@ -120,7 +123,11 @@ const CardApiList = () => {
 
     setShowToast(true);
     setToastMessage("Gif añadido a fovoritos!!!");
-  }} 
+    } else {
+    navigate(`/login?redirect=${window.location.pathname}`);
+    
+  }
+  } 
 
   return (
     <div className="d-flex flex-wrap">
