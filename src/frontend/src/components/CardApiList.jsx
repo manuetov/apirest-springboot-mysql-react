@@ -102,7 +102,7 @@ const CardApiList = () => {
 
     // Envio formData al servidor
     axios
-      .post(`${import.meta.env.VITE_APP_BASE_URL}/api/post`, formData, {
+      .post("http://localhost:8080/api/post", formData, {
         headers: { 
           "Authorization": sessionStorage.getItem('token'),
           "Content-Type": "multipart/form-data" 
