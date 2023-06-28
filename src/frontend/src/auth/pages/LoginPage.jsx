@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../context/AuthContext";
+import styled from "styled-components";
 
 const initialLoginForm = {
   username: "",
   password: "",
 };
+
 export const LoginPage = () => {
   const { handlerLogin } = useAuthContext();
 
@@ -14,7 +16,7 @@ export const LoginPage = () => {
 
   const [showModal, setShowModal] = useState(true);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const onInputChange = ({ target }) => {
     const { name, value } = target;
@@ -35,7 +37,7 @@ export const LoginPage = () => {
     }
 
     // se lo paso al contexto para que autenticar al usuario en useAuth
-    setIsLoading(true)
+    setIsLoading(true);
     handlerLogin({ username, password });
 
     setLoginForm(initialLoginForm);
@@ -47,11 +49,13 @@ export const LoginPage = () => {
 
   if (isLoading) {
     return (
-      <div className="container my-4">
-        <div className="spinner-border text-success" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
+      <Container>
+        <SpinnerContainer>
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </SpinnerContainer>
+      </Container>
     );
   }
 
@@ -106,3 +110,16 @@ export const LoginPage = () => {
     </>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
